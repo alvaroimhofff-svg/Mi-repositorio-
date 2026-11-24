@@ -1,11 +1,12 @@
-<title>Sales neutras</title>
+<title>Tipos de sales</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: una columna de estudio (máx. 920px) en el orden reconocer → regla → tabla 3×3 → fórmula → práctica.
-   Paleta del indicador universal de pH: violeta = lado básico, rojo = lado ácido, verde = sal, azul = lo que sobra (agua), ámbar = gas. */
+/* Layout: una columna de estudio (máx. 920px) en cuatro partes (neutras, ácidas, básicas, mixtas) + ejercicios.
+   Paleta del indicador universal de pH: violeta = base/metal, rojo = ácido/anión, verde = sal neutra,
+   azul = lo que sale como agua, ámbar = gas y avisos, magenta = segundo metal (mixtas). */
 :root{
   --bg:#f2f6f3;
   --surface:#ffffff;
@@ -18,6 +19,7 @@
   --neutral:#0f6f48;--neutral-soft:#d7efe2;
   --sobra:#0b6a9e;  --sobra-soft:#dbeef8;
   --gas:#8a560b;    --gas-soft:#f9ecd2;
+  --mix:#a3307a;    --mix-soft:#f8e1ef;
   --focus:#6534c2;
   --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
   --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -29,7 +31,7 @@
     --bg:#0e1411; --surface:#151d19; --surface-2:#1c2621; --ink:#e4eee8; --ink-2:#9fb2a7; --line:#2a3832;
     --acid:#ff8b76; --acid-soft:#3a1b16; --base:#bba0ff; --base-soft:#271d45;
     --neutral:#5dd49f; --neutral-soft:#12301f; --sobra:#6cc3f0; --sobra-soft:#0f2b3a;
-    --gas:#f2b85c; --gas-soft:#33260e; --focus:#bba0ff;
+    --gas:#f2b85c; --gas-soft:#33260e; --mix:#f28ccb; --mix-soft:#3a1830; --focus:#bba0ff;
     color-scheme:dark;
   }
 }
@@ -37,39 +39,80 @@
   --bg:#0e1411; --surface:#151d19; --surface-2:#1c2621; --ink:#e4eee8; --ink-2:#9fb2a7; --line:#2a3832;
   --acid:#ff8b76; --acid-soft:#3a1b16; --base:#bba0ff; --base-soft:#271d45;
   --neutral:#5dd49f; --neutral-soft:#12301f; --sobra:#6cc3f0; --sobra-soft:#0f2b3a;
-  --gas:#f2b85c; --gas-soft:#33260e; --focus:#bba0ff;
+  --gas:#f2b85c; --gas-soft:#33260e; --mix:#f28ccb; --mix-soft:#3a1830; --focus:#bba0ff;
   color-scheme:dark;
 }
 
 *,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2.5rem 4rem;display:grid;gap:4rem;hyphens:auto}
-h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1;hyphens:manual}
-h1{font-size:clamp(3rem,10vw,5.25rem);font-weight:800;letter-spacing:-.025em}
-h2{font-size:clamp(1.55rem,4vw,2.1rem);font-weight:700;letter-spacing:-.01em}
-h3{font-size:1.2rem;font-weight:700}
+.wrap{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2.5rem 4rem;display:grid;gap:5rem;hyphens:auto}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1;hyphens:manual}
+h1{font-size:clamp(2.8rem,9.5vw,5rem);font-weight:800;letter-spacing:-.025em}
+h4{font-size:1.15rem;font-weight:700}
 p{margin:0}
 b,strong{font-weight:700}
 sub,sup{font-size:68%;line-height:0;position:relative;vertical-align:baseline}
 sup{top:-.55em} sub{bottom:-.28em}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
-.m{color:var(--base)} .a{color:var(--acid)} .x{color:var(--sobra)}
+.m{color:var(--base)} .mm{color:var(--mix)} .mt{color:var(--gas)} .a{color:var(--acid)} .x{color:var(--sobra)}
+.hh{color:var(--acid);border-radius:.18em;box-shadow:inset 0 0 0 1.5px currentColor;padding:0 .06em}
+.ho{color:var(--base);border-radius:.18em;box-shadow:inset 0 0 0 1.5px currentColor;padding:0 .06em}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 
 /* ---------- Hero ---------- */
 .hero{display:grid;gap:1.4rem}
-.lead{font-size:clamp(1.08rem,2.4vw,1.25rem);max-width:60ch}
-.lead .tb{color:var(--base)} .lead .ta{color:var(--acid)}
-.thesis{font-family:var(--f-display);font-weight:700;font-size:clamp(1.1rem,3.4vw,1.55rem);display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .5rem;line-height:1.2}
+.lead{font-size:clamp(1.08rem,2.4vw,1.25rem);max-width:58ch}
+.types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem}
+@media (max-width:820px){.types{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:360px){.types{grid-template-columns:1fr}}
+.type{display:grid;gap:.45rem;align-content:start;padding:1rem 1.05rem 1.1rem;border-radius:var(--r);text-decoration:none;color:var(--ink);border:2px solid transparent;transition:transform .15s ease,border-color .15s ease}
+.type:hover{transform:translateY(-2px)}
+.type-k{font-family:var(--f-display);font-weight:800;font-size:1.25rem;display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+.type-k small{font-family:var(--f-mono);font-weight:400;font-size:.7rem;opacity:.8}
+.type-f{font-size:1.6rem;font-weight:700;line-height:1.25;color:var(--ink)}
+.type-d{font-size:.9rem;line-height:1.4}
+.ty-neutra{background:var(--neutral-soft)} .ty-neutra .type-k{color:var(--neutral)} .ty-neutra:hover{border-color:var(--neutral)}
+.ty-acida{background:var(--acid-soft)} .ty-acida .type-k{color:var(--acid)} .ty-acida:hover{border-color:var(--acid)}
+.ty-basica{background:var(--base-soft)} .ty-basica .type-k{color:var(--base)} .ty-basica:hover{border-color:var(--base)}
+.ty-mixta{background:var(--mix-soft)} .ty-mixta .type-k{color:var(--mix)} .ty-mixta:hover{border-color:var(--mix)}
+.hero-note{font-size:.95rem;max-width:70ch;color:var(--ink-2)}
+.hero-note b{color:var(--ink)}
+.go{justify-self:start;font-weight:700;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--line);padding-bottom:.1rem}
+.go:hover{border-color:var(--ink)}
+
+/* ---------- Partes ---------- */
+.part{display:grid;gap:3.25rem}
+.part-head{border-radius:18px;padding:clamp(1.25rem,4vw,2.25rem);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem 2rem;align-items:end;scroll-margin-top:1rem}
+@media (max-width:640px){.part-head{grid-template-columns:1fr}}
+.part-txt{display:grid;gap:.55rem}
+.part-k{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;opacity:.85}
+.part-head h2{font-size:clamp(2.2rem,7vw,3.5rem);font-weight:800;letter-spacing:-.02em}
+.part-txt > p:last-child{max-width:52ch;font-size:1.05rem;color:var(--ink)}
+.part-f{font-size:clamp(2.1rem,7vw,3.4rem);font-weight:700;line-height:1.1;color:var(--ink);white-space:nowrap}
+.pt-neutra{background:var(--neutral-soft)} .pt-neutra .part-k,.pt-neutra h2{color:var(--neutral)}
+.pt-acida{background:var(--acid-soft)} .pt-acida .part-k,.pt-acida h2{color:var(--acid)}
+.pt-basica{background:var(--base-soft)} .pt-basica .part-k,.pt-basica h2{color:var(--base)}
+.pt-mixta{background:var(--mix-soft)} .pt-mixta .part-k,.pt-mixta h2{color:var(--mix)}
+.pt-ej{background:var(--surface-2)} .pt-ej .part-k{color:var(--ink-2)}
+
+.sec{display:grid;gap:1.4rem}
+.sec-head{display:grid;gap:.45rem}
+.sec-title{font-size:clamp(1.4rem,3.6vw,1.85rem);font-weight:700;letter-spacing:-.01em}
+.sec-head > p:last-child:not(.eyebrow){max-width:62ch;color:var(--ink-2)}
+
+/* Intro neutras */
+.thesis{font-family:var(--f-display);font-weight:700;font-size:clamp(1.05rem,3.2vw,1.45rem);display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .5rem;line-height:1.2}
 .tk{padding:.28em .6em;border-radius:.45em}
 .tk-b{background:var(--base-soft);color:var(--base)}
 .tk-a{background:var(--acid-soft);color:var(--acid)}
 .tk-s{background:var(--neutral-soft);color:var(--neutral)}
 .tk-x{background:var(--sobra-soft);color:var(--sobra)}
 .op{color:var(--ink-2);font-weight:500}
-.hero-foot{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1.25rem;align-items:start;margin-top:.5rem}
-@media (max-width:720px){.hero-foot{grid-template-columns:1fr}}
+.intro{display:grid;gap:1.25rem}
+.intro-foot{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1.25rem;align-items:start}
+@media (max-width:720px){.intro-foot{grid-template-columns:1fr}}
 .ph{margin:0;display:grid;gap:.4rem}
 .ph-strip{display:grid;grid-template-columns:repeat(15,1fr);gap:3px}
 .ph-strip span{height:2.1rem;border-radius:3px;background:var(--c)}
@@ -81,18 +124,13 @@ sup{top:-.55em} sub{bottom:-.28em}
 .def{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.35rem;font-size:.95rem}
 .def-h{font-family:var(--f-display);font-weight:700;font-size:1.05rem}
 
-/* ---------- Secciones ---------- */
-.sec{display:grid;gap:1.5rem}
-.sec-head{display:grid;gap:.5rem}
-.sec-head > p:last-child{max-width:62ch;color:var(--ink-2)}
-
-/* Paso 1 */
+/* Paso 1 neutras */
 .halves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:1rem}
 .half{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
 .half-head{padding:1rem 1.1rem;display:grid;gap:.2rem}
 .half-head p{font-size:.95rem}
-.half-b .half-head{background:var(--base-soft)} .half-b h3{color:var(--base)}
-.half-a .half-head{background:var(--acid-soft)} .half-a h3{color:var(--acid)}
+.half-b .half-head{background:var(--base-soft)} .half-b h4{color:var(--base)}
+.half-a .half-head{background:var(--acid-soft)} .half-a h4{color:var(--acid)}
 .kinds{list-style:none;margin:0;padding:.2rem 1.1rem .5rem}
 .kinds li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem 1rem;align-items:center;padding:.8rem 0;border-top:1px solid var(--line)}
 .kinds li:first-child{border-top:0}
@@ -100,7 +138,6 @@ sup{top:-.55em} sub{bottom:-.28em}
 .kn b{font-family:var(--f-display);font-size:1.05rem}
 .kn small{font-family:var(--f-mono);font-size:.74rem;color:var(--ink-2)}
 .ke{font-weight:700;font-size:1.15rem;text-align:right;line-height:1.4}
-.ke .dot{color:var(--ink-2);font-weight:400;margin:0 .25em}
 .trae{font-family:var(--f-mono);font-size:.7rem;padding:.12rem .45rem;border-radius:999px;white-space:nowrap;display:inline-block;line-height:1.5}
 .trae.si{background:var(--sobra-soft);color:var(--sobra)}
 .trae.no{border:1px solid var(--line);color:var(--ink-2)}
@@ -108,7 +145,7 @@ sup{top:-.55em} sub{bottom:-.28em}
 .spot ul{margin:0;padding-left:1.1rem;display:grid;gap:.35rem}
 .spot-h{font-family:var(--f-display);font-weight:700}
 
-/* Paso 2 */
+/* Paso 2 neutras */
 .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15.5rem),1fr));gap:.75rem}
 .rule{border-radius:var(--r);padding:1rem 1.1rem 1.1rem;display:grid;gap:.45rem;align-content:start}
 .rule-k{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
@@ -116,15 +153,14 @@ sup{top:-.55em} sub{bottom:-.28em}
 .r-agua{background:var(--sobra-soft)} .r-agua .rule-then{color:var(--sobra)}
 .r-h2{background:var(--gas-soft)} .r-h2 .rule-then{color:var(--gas)}
 .r-sola{background:var(--neutral-soft)} .r-sola .rule-then{color:var(--neutral)}
-.aside{border-left:3px solid var(--sobra);padding:.2rem 0 .2rem 1rem;max-width:64ch}
+.aside{border-left:3px solid var(--sobra);padding:.2rem 0 .2rem 1rem;max-width:66ch}
 
-/* Paso 3: tabla */
+/* Tabla 3×3 */
 .matrix-scroll{overflow-x:auto;margin-inline:-6px}
 .matrix{width:100%;min-width:340px;table-layout:fixed;border-collapse:separate;border-spacing:6px}
 .matrix col.c0{width:25%}
 .matrix th{font-weight:400;text-align:left;padding:.2rem .3rem .4rem;vertical-align:bottom}
 .matrix tbody th{vertical-align:middle}
-.hd{display:table-cell}
 .hd .hname{display:block;font-family:var(--f-display);font-weight:700;font-size:1rem;line-height:1.15}
 .hd-a .hname{color:var(--acid)} .hd-b .hname{color:var(--base)}
 .hd .hej{display:block;font-weight:700;font-size:.9rem;margin:.15rem 0 .3rem}
@@ -141,19 +177,23 @@ sup{top:-.55em} sub{bottom:-.28em}
 .o-sola{background:var(--neutral-soft);color:var(--neutral)}
 .o-no{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,var(--surface) 6px 12px);color:var(--ink-2)}
 @media (max-width:520px){
-  .cell{padding:.5rem .5rem;min-height:4.8rem}
+  .cell{padding:.5rem;min-height:4.8rem}
   .cell-out{font-size:.88rem}
   .hd .hname{font-size:.88rem}
   .hd .hej{font-size:.8rem}
 }
-
 .detail{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1rem,3vw,1.75rem);display:grid;gap:1.1rem;min-width:0}
 .detail.swap{animation:pop .28s ease}
 @keyframes pop{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
 .detail-head{display:grid;gap:.6rem}
-.badges{display:flex;flex-wrap:wrap;gap:.4rem}
-.tag,.pill{font-family:var(--f-mono);font-size:.76rem;padding:.2rem .6rem;border-radius:999px;font-weight:500}
+.detail-head h4{font-size:1.25rem}
+.badges{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.tag,.pill{font-family:var(--f-mono);font-size:.76rem;padding:.2rem .6rem;border-radius:999px;font-weight:500;white-space:nowrap}
 .tag{border:1px solid var(--line);color:var(--ink-2)}
+.t-neutra{background:var(--neutral-soft);color:var(--neutral)}
+.t-acida{background:var(--acid-soft);color:var(--acid)}
+.t-basica{background:var(--base-soft);color:var(--base)}
+.t-mixta{background:var(--mix-soft);color:var(--mix)}
 .big-eq{font-size:clamp(1.3rem,4.6vw,2rem);font-weight:700;line-height:1.5;word-spacing:.08em}
 .legend{display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;font-size:.85rem}
 .legend i{display:inline-block;width:.7em;height:.7em;border-radius:3px;background:currentColor;margin-right:.4em}
@@ -167,33 +207,34 @@ sup{top:-.55em} sub{bottom:-.28em}
 @media (max-width:560px){.steps li{grid-template-columns:1fr}}
 .why{max-width:66ch}
 .callout{border-radius:8px;padding:.75rem .9rem;font-size:.95rem;max-width:70ch}
-.callout.tip{background:var(--neutral-soft)}
-.callout.tip b{color:var(--neutral)}
-.callout.warn{background:var(--gas-soft)}
-.callout.warn b{color:var(--gas)}
+.callout.tip{background:var(--neutral-soft)} .callout.tip b{color:var(--neutral)}
+.callout.warn{background:var(--gas-soft)} .callout.warn b{color:var(--gas)}
 
-/* Paso 4: armar fórmula */
+/* Herramientas (chips, pasos de cruce, molécula) */
+.tool{display:grid;gap:1.1rem}
 .pickers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:1.25rem}
 fieldset{border:0;margin:0;padding:0;min-width:0}
 legend{font-family:var(--f-mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);margin-bottom:.6rem;padding:0}
 .chips{display:flex;flex-wrap:wrap;gap:.45rem}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-.chip label{display:grid;justify-items:center;gap:0;min-width:3.6rem;padding:.45rem .7rem .4rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700;font-size:1.1rem;line-height:1.3;transition:background .15s ease,border-color .15s ease}
-.chip label small{font-weight:400;font-size:.7rem;color:var(--ink-2);font-family:var(--f-mono)}
-.chip-b label:hover{border-color:var(--base)}
-.chip-a label:hover{border-color:var(--acid)}
+.chip label{display:grid;justify-items:center;min-width:3.6rem;padding:.45rem .7rem .4rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700;font-size:1.1rem;line-height:1.3;transition:background .15s ease,border-color .15s ease}
+.chip label small{font-weight:400;font-size:.7rem;color:var(--ink-2);font-family:var(--f-mono);white-space:nowrap}
+.chip label:hover{border-color:var(--ink-2)}
 .chip-b input:checked + label{background:var(--base-soft);border-color:var(--base);color:var(--base)}
 .chip-a input:checked + label{background:var(--acid-soft);border-color:var(--acid);color:var(--acid)}
+.chip-m input:checked + label{background:var(--mix-soft);border-color:var(--mix);color:var(--mix)}
+.chip-n input:checked + label,.chip-t input:checked + label{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .chip input:checked + label small{color:inherit}
 .chip input:focus-visible + label{outline:3px solid var(--focus);outline-offset:2px}
+.chip-t label{font-size:.95rem;padding:.5rem .9rem}
 .cross{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
 @media (max-width:680px){.cross{grid-template-columns:1fr}}
-.cstep{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.5rem;align-content:start}
+.cstep{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.5rem;align-content:start;min-width:0}
 .cstep-k{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
-.cform{font-size:2rem;font-weight:700;line-height:1.35;min-height:2.7rem}
+.cform{font-size:clamp(1.6rem,5vw,2rem);font-weight:700;line-height:1.35;min-height:2.7rem}
 .cform .gap{display:inline-block;width:.6em}
-.cstep p{font-size:.9rem;color:var(--ink-2)}
+.cstep p:not(.cform):not(.cstep-k){font-size:.9rem;color:var(--ink-2)}
 .cstep.final{border-color:var(--neutral);background:var(--neutral-soft)}
 .qa{color:var(--acid);background:var(--acid-soft);border-radius:4px;padding:0 .14em}
 .qb{color:var(--base);background:var(--base-soft);border-radius:4px;padding:0 .14em}
@@ -204,213 +245,609 @@ legend{font-family:var(--f-mono);font-size:.74rem;text-transform:uppercase;lette
 .facts .feq{font-weight:700;font-size:1.08rem}
 .facts .note{display:block;font-size:.88rem;color:var(--gas);margin-top:.25rem}
 @media (max-width:560px){.facts{grid-template-columns:1fr;gap:.2rem}.facts dd{margin-bottom:.6rem}}
+.mol{display:grid;gap:.6rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem}
+.mol-k{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.mol-row{display:flex;flex-wrap:wrap;align-items:flex-start;gap:.5rem}
+.hb{display:grid;justify-items:center;gap:.2rem;min-width:3rem}
+.hb b{font-size:1.35rem;font-weight:700;width:2.8rem;height:2.8rem;display:grid;place-items:center;border-radius:50%;border:2px solid currentColor}
+.hb small{font-family:var(--f-mono);font-size:.64rem;color:var(--ink-2);white-space:nowrap}
+.hb.oh b{font-size:1.05rem}
+.hb.gone{color:var(--sobra)} .hb.gone b{border-style:dashed;opacity:.8}
+.hb.keep{color:var(--acid)} .hb.keep b{background:var(--acid-soft)}
+.hb.keepo{color:var(--base)} .hb.keepo b{background:var(--base-soft)}
+.hb.metal.m b{background:var(--base-soft)} .hb.metal.mm b{background:var(--mix-soft)} .hb.metal.mt b{background:var(--gas-soft)}
+.mol-core{font-size:1.6rem;font-weight:700;height:2.8rem;display:flex;align-items:center;padding:0 .2rem}
+.mol-cap{font-size:.95rem}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:.75rem}
+.slot{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.85rem 1rem;display:grid;gap:.55rem}
+.slot-k{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.result{display:grid;gap:.75rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem}
+.result-top{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem}
+.result .cform{font-size:clamp(2rem,6vw,2.6rem);min-height:0}
 
-/* Paso 5: quiz */
+/* Tríos y tablas */
+.trio{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:.75rem}
+.trio > div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.4rem;align-content:start}
+.trio-k{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.tbl{width:100%;border-collapse:collapse;font-size:.95rem;min-width:560px}
+.tbl th,.tbl td{text-align:left;padding:.65rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl thead th{font-family:var(--f-mono);font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);background:var(--surface-2)}
+.tbl tbody tr:last-child td,.tbl tbody tr:last-child th{border-bottom:0}
+.tbl .f{font-weight:700;white-space:nowrap;font-size:1.05rem}
+.tbl tbody th{font-family:var(--f-display);font-weight:700}
+.ex-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));gap:.75rem}
+.ex-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;display:grid;gap:.4rem;align-content:start}
+.ex-card .cform{font-size:1.8rem;min-height:0}
+.ex-card .feq{font-weight:700;font-size:.98rem}
+.ex-card p:last-child{font-size:.9rem;color:var(--ink-2)}
+
+/* Quiz */
 .quiz{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1rem,3vw,1.75rem);display:grid;gap:1.1rem;min-width:0}
 .qtop{display:flex;justify-content:space-between;gap:1rem;font-family:var(--f-mono);font-size:.78rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .qprog{height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden}
 .qprog span{display:block;height:100%;background:var(--neutral);transition:width .3s ease}
 .qreact{font-size:clamp(1.55rem,6vw,2.4rem);font-weight:700;line-height:1.35}
-.qreact:focus{outline:none}
+.qreact.sm{font-size:clamp(1.25rem,4vw,1.6rem)}
+.qname{font-family:var(--f-display);font-size:clamp(1.25rem,4.2vw,1.7rem);font-weight:700;line-height:1.25}
+.qreact:focus,.qname:focus,.qend:focus{outline:none}
 .qmark{color:var(--ink-2)}
 .qpart{display:grid;gap:.55rem}
 .qlabel{font-weight:700}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13.5rem),1fr));gap:.5rem}
-.opt{font:inherit;text-align:left;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;line-height:1.3}
+.opt{font:inherit;text-align:left;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;line-height:1.35}
 .opt:hover:not(:disabled){border-color:var(--ink-2)}
 .opt:disabled{cursor:default}
 .opt:disabled:not(.ok):not(.bad){opacity:.5}
 .opt.ok{border-color:var(--neutral);background:var(--neutral-soft);color:var(--neutral);font-weight:700}
 .opt.bad{border-color:var(--acid);background:var(--acid-soft);color:var(--acid)}
-.qmini{font-size:.9rem;min-height:1.4em}
-.qmini.good{color:var(--neutral)} .qmini.bad{color:var(--acid)}
+.qmini{font-size:.95rem;min-height:1.4em}
+.qmini.good{color:var(--neutral);font-weight:700} .qmini.bad{color:var(--acid);font-weight:700}
 .qreveal{display:grid;gap:.75rem}
 .qreveal:empty{display:none}
 .btn{font:inherit;font-weight:700;padding:.7rem 1.3rem;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer;justify-self:start}
 .btn:hover{opacity:.9}
 .qend{font-family:var(--f-display);font-size:clamp(3rem,12vw,4.5rem);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 
-/* Correcciones */
+/* Correcciones y ejercicios en papel */
 .fixes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:1rem}
 .fix{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.1rem 1.2rem;display:grid;gap:.6rem;align-content:start}
 .fix-tag{font-family:var(--f-mono);font-size:.74rem;color:var(--gas);text-transform:uppercase;letter-spacing:.07em}
 .fix .feq{font-weight:700;font-size:1.15rem;background:var(--surface-2);border-radius:8px;padding:.5rem .75rem}
+.hw{display:grid;gap:1.75rem}
+.hw-group{display:grid;gap:.65rem}
+.hw-list{margin:0;padding:0;list-style:none;display:grid;gap:.5rem;counter-reset:hw}
+.hw-list li{counter-increment:hw;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem;display:grid;gap:.45rem}
+.hw-q{font-weight:700;font-size:1.1rem}
+.hw-q::before{content:counter(hw) ". ";color:var(--ink-2);font-weight:400}
+.hw-hint{font-size:.88rem;color:var(--ink-2)}
+details summary{cursor:pointer;color:var(--ink-2);font-size:.9rem;width:max-content;max-width:100%}
+details summary:hover{color:var(--ink)}
+details[open] summary{margin-bottom:.45rem}
+.ans{display:grid;gap:.25rem;background:var(--surface-2);border-radius:8px;padding:.65rem .85rem}
+.ans .feq{font-weight:700;font-size:1.08rem}
 footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:1.25rem}
 
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <main class="wrap" lang="es">
 
+  <!-- ===================== HERO ===================== -->
   <header class="hero">
-    <p class="eyebrow">Química · Reacciones de neutralización</p>
-    <h1>Sales neutras</h1>
-    <p class="lead">Las seis reacciones de tus apuntes siguen la misma idea. Un reactivo pone el <b class="tb">metal</b>, el otro pone el <b class="ta">no metal</b>, y entre los dos arman la sal. Lo único que cambia de un caso a otro es <b>qué sobra</b>.</p>
-    <p class="thesis">
-      <span class="tk tk-b">lado básico</span><span class="op">+</span><span class="tk tk-a">lado ácido</span><span class="op">→</span><span class="tk tk-s">sal</span><span class="op">+</span><span class="tk tk-x">lo que sobre</span>
-    </p>
-    <div class="hero-foot">
-      <figure class="ph">
-        <div class="ph-strip" aria-hidden="true">
-          <span style="--c:#d42a3c"></span><span style="--c:#e2442f"></span><span style="--c:#ec6025"></span><span style="--c:#f2801f"></span><span style="--c:#f5a31d"></span><span style="--c:#efc21c"></span><span style="--c:#c4cd2b"></span><span class="seven" style="--c:#62b844"></span><span style="--c:#2ea55c"></span><span style="--c:#1a9889"></span><span style="--c:#1f7eb8"></span><span style="--c:#2d5fb3"></span><span style="--c:#4847a8"></span><span style="--c:#5c399c"></span><span style="--c:#6b2c8f"></span>
-        </div>
-        <div class="ph-nums" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span class="seven">7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span></div>
-        <figcaption><span>← ácido</span><span class="mid">7 · se compensan</span><span>básico →</span></figcaption>
-      </figure>
-      <aside class="def">
-        <p class="def-h">¿Por qué se llaman neutras?</p>
-        <p>Porque la neutralización es completa. El ácido entrega todos sus H<sup>+</sup> y la base todos sus OH<sup>−</sup>, así que en la fórmula de la sal no queda ningún H ni OH. Si quedara alguno, sería una sal ácida (como <span data-f="NaHSO4"></span>) o básica (como <span data-f="Mg(OH)Cl"></span>).</p>
-      </aside>
-    </div>
+    <p class="eyebrow">Química · Sales inorgánicas</p>
+    <h1>Tipos de sales</h1>
+    <p class="lead">Todas las sales salen de juntar un ácido con una base. Lo que las diferencia es qué quedó en la fórmula cuando terminó la reacción. Tocá un tipo para ir a su parte.</p>
+    <nav class="types" aria-label="Los cuatro tipos de sales">
+      <a class="type ty-neutra" href="#neutras">
+        <span class="type-k">Neutra <small>Parte 1</small></span>
+        <span class="type-f" data-f="{m|Na2}{a|SO4}"></span>
+        <span class="type-d">No quedó nada. El ácido entregó todos sus H y la base todos sus OH.</span>
+      </a>
+      <a class="type ty-acida" href="#acidas">
+        <span class="type-k">Ácida <small>Parte 2</small></span>
+        <span class="type-f" data-f="{m|Na}{hh|H}{a|SO4}"></span>
+        <span class="type-d">Quedó H del ácido. Faltó base para neutralizarlo todo.</span>
+      </a>
+      <a class="type ty-basica" href="#basicas">
+        <span class="type-k">Básica <small>Parte 3</small></span>
+        <span class="type-f" data-f="{m|Mg}{ho|(OH)}{a|Cl}"></span>
+        <span class="type-d">Quedó OH de la base. Faltó ácido para neutralizarla toda.</span>
+      </a>
+      <a class="type ty-mixta" href="#mixtas">
+        <span class="type-k">Mixta <small>Parte 4</small></span>
+        <span class="type-f" data-f="{m|K}{mm|Na}{a|SO4}"></span>
+        <span class="type-d">No quedó H ni OH, pero hay dos metales distintos.</span>
+      </a>
+    </nav>
+    <p class="hero-note"><b>Ojo con los nombres.</b> <i>Ácida</i> y <i>básica</i> describen lo que queda en la fórmula, no el pH. El bicarbonato de sodio (<span data-f="NaHCO3"></span>) es una sal ácida, pero disuelto en agua da una solución levemente básica.</p>
+    <a class="go" href="#ejercicios">Ir directo a los ejercicios ↓</a>
   </header>
 
-  <!-- PASO 1 -->
-  <section class="sec" aria-labelledby="s1">
-    <div class="sec-head">
-      <p class="eyebrow">Paso 1 · Reconocer</p>
-      <h2 id="s1">¿Qué trae cada reactivo?</h2>
-      <p>Antes de escribir nada, clasificá los dos reactivos. En todas las reacciones hay uno de cada lado.</p>
+  <!-- ===================== PARTE 1: NEUTRAS ===================== -->
+  <div class="part" id="neutras">
+    <header class="part-head pt-neutra">
+      <div class="part-txt">
+        <p class="part-k">Parte 1 de 4</p>
+        <h2>Sales neutras</h2>
+        <p>Neutralización completa. Un reactivo pone el metal, el otro pone el no metal, y en la sal no queda ningún H ni OH.</p>
+      </div>
+      <p class="part-f" data-f="{m|Na2}{a|SO4}"></p>
+    </header>
+
+    <div class="intro">
+      <p class="thesis">
+        <span class="tk tk-b">lado básico</span><span class="op">+</span><span class="tk tk-a">lado ácido</span><span class="op">→</span><span class="tk tk-s">sal</span><span class="op">+</span><span class="tk tk-x">lo que sobre</span>
+      </p>
+      <div class="intro-foot">
+        <figure class="ph">
+          <div class="ph-strip" aria-hidden="true">
+            <span style="--c:#d42a3c"></span><span style="--c:#e2442f"></span><span style="--c:#ec6025"></span><span style="--c:#f2801f"></span><span style="--c:#f5a31d"></span><span style="--c:#efc21c"></span><span style="--c:#c4cd2b"></span><span class="seven" style="--c:#62b844"></span><span style="--c:#2ea55c"></span><span style="--c:#1a9889"></span><span style="--c:#1f7eb8"></span><span style="--c:#2d5fb3"></span><span style="--c:#4847a8"></span><span style="--c:#5c399c"></span><span style="--c:#6b2c8f"></span>
+          </div>
+          <div class="ph-nums" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span class="seven">7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span></div>
+          <figcaption><span>← ácido</span><span class="mid">7 · se compensan</span><span>básico →</span></figcaption>
+        </figure>
+        <aside class="def">
+          <p class="def-h">¿Por qué se llaman neutras?</p>
+          <p>Porque la neutralización es completa. El ácido entrega todos sus H<sup>+</sup> y la base todos sus OH<sup>−</sup>, así que en la fórmula de la sal no queda ningún H ni OH. Si quedara alguno, sería una sal ácida o básica (partes 2 y 3).</p>
+        </aside>
+      </div>
     </div>
-    <div class="halves">
-      <div class="half half-b">
-        <div class="half-head"><h3>Lado básico</h3><p>Pone el <b>metal</b>, que en la sal queda como catión (+).</p></div>
-        <ul class="kinds">
-          <li><div class="kn"><b>Hidróxido</b><small>metal + OH</small><span class="trae si">trae OH</span></div><div class="ke" data-f="{m|Na}{x|OH} · {m|Ca}{x|(OH)2}"></div></li>
-          <li><div class="kn"><b>Óxido básico</b><small>metal + O</small><span class="trae si">trae O</span></div><div class="ke" data-f="{m|Na2}{x|O} · {m|Ca}{x|O}"></div></li>
-          <li><div class="kn"><b>Metal</b><small>el metal solo</small><span class="trae no">no trae nada</span></div><div class="ke" data-f="{m|K} · {m|Zn} · {m|Mg}"></div></li>
+
+    <section class="sec" aria-labelledby="s1">
+      <div class="sec-head">
+        <p class="eyebrow">Paso 1 · Reconocer</p>
+        <h3 class="sec-title" id="s1">¿Qué trae cada reactivo?</h3>
+        <p>Antes de escribir nada, clasificá los dos reactivos. En todas las reacciones hay uno de cada lado.</p>
+      </div>
+      <div class="halves">
+        <div class="half half-b">
+          <div class="half-head"><h4>Lado básico</h4><p>Pone el <b>metal</b>, que en la sal queda como catión (+).</p></div>
+          <ul class="kinds">
+            <li><div class="kn"><b>Hidróxido</b><small>metal + OH</small><span class="trae si">trae OH</span></div><div class="ke" data-f="{m|Na}{x|OH} · {m|Ca}{x|(OH)2}"></div></li>
+            <li><div class="kn"><b>Óxido básico</b><small>metal + O</small><span class="trae si">trae O</span></div><div class="ke" data-f="{m|Na2}{x|O} · {m|Ca}{x|O}"></div></li>
+            <li><div class="kn"><b>Metal</b><small>el metal solo</small><span class="trae no">no trae nada</span></div><div class="ke" data-f="{m|K} · {m|Zn} · {m|Mg}"></div></li>
+          </ul>
+        </div>
+        <div class="half half-a">
+          <div class="half-head"><h4>Lado ácido</h4><p>Pone el <b>no metal</b>, que en la sal queda como anión (−).</p></div>
+          <ul class="kinds">
+            <li><div class="kn"><b>Oxoácido</b><small>H + no metal + O</small><span class="trae si">trae H</span></div><div class="ke" data-f="{x|H}{a|NO3} · {x|H2}{a|SO4}"></div></li>
+            <li><div class="kn"><b>Hidrácido</b><small>H + no metal</small><span class="trae si">trae H</span></div><div class="ke" data-f="{x|H}{a|Cl} · {x|H2}{a|S}"></div></li>
+            <li><div class="kn"><b>Óxido ácido</b><small>no metal + O</small><span class="trae no">no trae H</span></div><div class="ke" data-f="{a|SO3} · {a|CO2}"></div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="spot">
+        <p class="spot-h">Cómo darte cuenta de un vistazo</p>
+        <ul>
+          <li><b>Empieza con H</b>: es un ácido. Si además tiene O, es oxoácido (<span data-f="HNO3"></span>). Si no tiene O, es hidrácido (<span data-f="HCl"></span>).</li>
+          <li><b>Termina en OH</b>: es un hidróxido (<span data-f="NaOH"></span>).</li>
+          <li><b>Un elemento + O, sin H</b>: es un óxido. Básico si el elemento es un metal (<span data-f="Na2O"></span>), ácido si es un no metal (<span data-f="SO3"></span>).</li>
+          <li><b>Un elemento solo</b>: es un metal (K, Zn).</li>
         </ul>
       </div>
-      <div class="half half-a">
-        <div class="half-head"><h3>Lado ácido</h3><p>Pone el <b>no metal</b>, que en la sal queda como anión (−).</p></div>
-        <ul class="kinds">
-          <li><div class="kn"><b>Oxoácido</b><small>H + no metal + O</small><span class="trae si">trae H</span></div><div class="ke" data-f="{x|H}{a|NO3} · {x|H2}{a|SO4}"></div></li>
-          <li><div class="kn"><b>Hidrácido</b><small>H + no metal</small><span class="trae si">trae H</span></div><div class="ke" data-f="{x|H}{a|Cl} · {x|H2}{a|S}"></div></li>
-          <li><div class="kn"><b>Óxido ácido</b><small>no metal + O</small><span class="trae no">no trae H</span></div><div class="ke" data-f="{a|SO3} · {a|CO2}"></div></li>
-        </ul>
+    </section>
+
+    <section class="sec" aria-labelledby="s2">
+      <div class="sec-head">
+        <p class="eyebrow">Paso 2 · La regla</p>
+        <h3 class="sec-title" id="s2">¿Qué sobra además de la sal?</h3>
+        <p>Fijate solamente si alguien trae H y si alguien trae O. Con eso ya sabés qué sale.</p>
       </div>
-    </div>
-    <div class="spot">
-      <p class="spot-h">Cómo darte cuenta de un vistazo</p>
-      <ul>
-        <li><b>Empieza con H</b>: es un ácido. Si además tiene O, es oxoácido (<span data-f="HNO3"></span>). Si no tiene O, es hidrácido (<span data-f="HCl"></span>).</li>
-        <li><b>Termina en OH</b>: es un hidróxido (<span data-f="NaOH"></span>).</li>
-        <li><b>Un elemento + O, sin H</b>: es un óxido. Básico si el elemento es un metal (<span data-f="Na2O"></span>), ácido si es un no metal (<span data-f="SO3"></span>).</li>
-        <li><b>Un elemento solo</b>: es un metal (K, Zn).</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- PASO 2 -->
-  <section class="sec" aria-labelledby="s2">
-    <div class="sec-head">
-      <p class="eyebrow">Paso 2 · La regla</p>
-      <h2 id="s2">¿Qué sobra además de la sal?</h2>
-      <p>Fijate solamente si alguien trae H y si alguien trae O. Con eso ya sabés qué sale.</p>
-    </div>
-    <div class="rules">
-      <div class="rule r-agua">
-        <p class="rule-k">Si</p>
-        <p>alguien trae <b>H</b> y alguien trae <b>O u OH</b></p>
-        <p class="rule-k">Sale</p>
-        <p class="rule-then">sal + agua <span data-f="(H2O)"></span></p>
+      <div class="rules">
+        <div class="rule r-agua">
+          <p class="rule-k">Si</p>
+          <p>alguien trae <b>H</b> y alguien trae <b>O u OH</b></p>
+          <p class="rule-k">Sale</p>
+          <p class="rule-then">sal + agua <span data-f="(H2O)"></span></p>
+        </div>
+        <div class="rule r-h2">
+          <p class="rule-k">Si</p>
+          <p>hay <b>H</b>, pero del otro lado hay un <b>metal solo</b></p>
+          <p class="rule-k">Sale</p>
+          <p class="rule-then">sal + hidrógeno gaseoso <span data-f="(H2↑)"></span></p>
+        </div>
+        <div class="rule r-sola">
+          <p class="rule-k">Si</p>
+          <p><b>nadie trae H</b> (son dos óxidos)</p>
+          <p class="rule-k">Sale</p>
+          <p class="rule-then">solo sal, no sobra nada</p>
+        </div>
       </div>
-      <div class="rule r-h2">
-        <p class="rule-k">Si</p>
-        <p>hay <b>H</b>, pero del otro lado hay un <b>metal solo</b></p>
-        <p class="rule-k">Sale</p>
-        <p class="rule-then">sal + hidrógeno gaseoso <span data-f="(H2↑)"></span></p>
+      <p class="aside">El hidróxido cuenta doble: su OH ya trae H y O juntos. Por eso <b>hidróxido + óxido ácido</b> igual da agua, aunque el óxido ácido no tenga hidrógeno.</p>
+    </section>
+
+    <section class="sec" aria-labelledby="s3">
+      <div class="sec-head">
+        <p class="eyebrow">Paso 3 · Explorar</p>
+        <h3 class="sec-title" id="s3">Todas las combinaciones</h3>
+        <p>Cada casillero cruza un reactivo del lado básico con uno del lado ácido. Tocá uno para ver la reacción armada paso a paso.</p>
       </div>
-      <div class="rule r-sola">
-        <p class="rule-k">Si</p>
-        <p><b>nadie trae H</b> (son dos óxidos)</p>
-        <p class="rule-k">Sale</p>
-        <p class="rule-then">solo sal, no sobra nada</p>
+      <div class="matrix-scroll"><table class="matrix" id="matrix"></table></div>
+      <article class="detail" id="detail" aria-live="polite"></article>
+    </section>
+
+    <section class="sec" aria-labelledby="s4">
+      <div class="sec-head">
+        <p class="eyebrow">Paso 4 · Escribir</p>
+        <h3 class="sec-title" id="s4">Armá la fórmula de la sal</h3>
+        <p>Es el mismo método de tus apuntes: escribís las cargas, las cruzás y simplificás. Elegí un catión y un anión.</p>
       </div>
-    </div>
-    <p class="aside">El hidróxido cuenta doble: su OH ya trae H y O juntos. Por eso <b>hidróxido + óxido ácido</b> igual da agua, aunque el óxido ácido no tenga hidrógeno.</p>
-  </section>
+      <div class="tool">
+        <div class="pickers">
+          <fieldset><legend>Catión · lo pone el lado básico</legend><div class="chips" id="cats"></div></fieldset>
+          <fieldset><legend>Anión · lo pone el lado ácido</legend><div class="chips" id="ans"></div></fieldset>
+        </div>
+        <div class="cross">
+          <div class="cstep"><p class="cstep-k">1 · Escribí las cargas</p><p class="cform" id="c1"></p><p>Cada ion con su carga.</p></div>
+          <div class="cstep"><p class="cstep-k">2 · Cruzalas</p><p class="cform" id="c2"></p><p id="c2t"></p></div>
+          <div class="cstep final"><p class="cstep-k">3 · Simplificá</p><p class="cform" id="c3"></p><p id="c3t"></p></div>
+        </div>
+        <dl class="facts" id="facts"></dl>
+      </div>
+    </section>
 
-  <!-- PASO 3 -->
-  <section class="sec" aria-labelledby="s3">
-    <div class="sec-head">
-      <p class="eyebrow">Paso 3 · Explorar</p>
-      <h2 id="s3">Todas las combinaciones</h2>
-      <p>Cada casillero cruza un reactivo del lado básico con uno del lado ácido. Tocá uno para ver la reacción armada paso a paso.</p>
-    </div>
-    <div class="matrix-scroll"><table class="matrix" id="matrix"></table></div>
-    <article class="detail" id="detail" aria-live="polite"></article>
-  </section>
+    <section class="sec" aria-labelledby="s5">
+      <div class="sec-head">
+        <p class="eyebrow">Paso 5 · Practicar</p>
+        <h3 class="sec-title" id="s5">¿Qué combinación es y qué sale?</h3>
+        <p>Ocho reacciones mezcladas. En cada una, primero reconocé los reactivos y después decidí qué se forma además de la sal.</p>
+      </div>
+      <div class="quiz" id="quiz"></div>
+    </section>
 
-  <!-- PASO 4 -->
-  <section class="sec" aria-labelledby="s4">
-    <div class="sec-head">
-      <p class="eyebrow">Paso 4 · Escribir</p>
-      <h2 id="s4">Armá la fórmula de la sal</h2>
-      <p>Es el mismo método de tus apuntes: escribís las cargas, las cruzás y simplificás. Elegí un catión y un anión.</p>
-    </div>
-    <div class="pickers">
-      <fieldset><legend>Catión · lo pone el lado básico</legend><div class="chips" id="cats"></div></fieldset>
-      <fieldset><legend>Anión · lo pone el lado ácido</legend><div class="chips" id="ans"></div></fieldset>
-    </div>
-    <div class="cross">
-      <div class="cstep"><p class="cstep-k">1 · Escribí las cargas</p><p class="cform" id="c1"></p><p id="c1t">Cada ion con su carga.</p></div>
-      <div class="cstep"><p class="cstep-k">2 · Cruzalas</p><p class="cform" id="c2"></p><p id="c2t"></p></div>
-      <div class="cstep final"><p class="cstep-k">3 · Simplificá</p><p class="cform" id="c3"></p><p id="c3t"></p></div>
-    </div>
-    <dl class="facts" id="facts"></dl>
-  </section>
+    <section class="sec" aria-labelledby="s6">
+      <div class="sec-head">
+        <p class="eyebrow">Revisión de tus apuntes</p>
+        <h3 class="sec-title" id="s6">Para corregir en la carpeta</h3>
+        <p>Los casos 1, 3, 4 y 5 están bien planteados y balanceados. Revisá estos dos.</p>
+      </div>
+      <div class="fixes">
+        <article class="fix">
+          <p class="fix-tag">Caso 2</p>
+          <h4>El SO<sub>3</sub> no es un oxoácido</h4>
+          <p>Lo anotaste como “Hidróxido + Oxoácido”, pero el <span data-f="SO3"></span> no tiene hidrógeno, así que es un <b>óxido ácido</b>. El título correcto es <b>Hidróxido + Óxido ácido</b>. La ecuación está bien.</p>
+          <p class="feq" data-f="2{m|Na}{x|OH} + {a|SO3} → {m|Na2}{a|SO4} + {x|H2O}"></p>
+        </article>
+        <article class="fix">
+          <p class="fix-tag">Caso 6</p>
+          <h4>El ácido nítrico es un ejemplo engañoso</h4>
+          <p>La ecuación está bien balanceada y sirve para aprender el esquema. En la realidad, el <span data-f="HNO3"></span> es oxidante y con los metales suele soltar óxidos de nitrógeno en vez de <span data-f="H2"></span>. Si tu profe lo da así, usalo así en la prueba. Este ejemplo también se cumple en el laboratorio:</p>
+          <p class="feq" data-f="{m|Zn} + {x|H2}{a|SO4} → {m|Zn}{a|SO4} + {x|H2}↑"></p>
+        </article>
+      </div>
+    </section>
+  </div>
 
-  <!-- PASO 5 -->
-  <section class="sec" aria-labelledby="s5">
-    <div class="sec-head">
-      <p class="eyebrow">Paso 5 · Practicar</p>
-      <h2 id="s5">¿Qué combinación es y qué sale?</h2>
-      <p>Ocho reacciones mezcladas. En cada una, primero reconocé los reactivos y después decidí qué se forma además de la sal.</p>
-    </div>
-    <div class="quiz" id="quiz"></div>
-  </section>
+  <!-- ===================== PARTE 2: ÁCIDAS ===================== -->
+  <div class="part" id="acidas">
+    <header class="part-head pt-acida">
+      <div class="part-txt">
+        <p class="part-k">Parte 2 de 4</p>
+        <h2>Sales ácidas</h2>
+        <p>Faltó base. El ácido no entregó todos sus H<sup>+</sup>, y los que le quedaron siguen pegados al anión.</p>
+      </div>
+      <p class="part-f" data-f="{m|Na}{hh|H}{a|SO4}"></p>
+    </header>
 
-  <!-- CORRECCIONES -->
-  <section class="sec" aria-labelledby="s6">
-    <div class="sec-head">
-      <p class="eyebrow">Revisión de tus apuntes</p>
-      <h2 id="s6">Para corregir en la carpeta</h2>
-      <p>Los casos 1, 3, 4 y 5 están bien planteados y balanceados. Revisá estos dos.</p>
-    </div>
-    <div class="fixes">
-      <article class="fix">
-        <p class="fix-tag">Caso 2</p>
-        <h3>El SO<sub>3</sub> no es un oxoácido</h3>
-        <p>Lo anotaste como “Hidróxido + Oxoácido”, pero el <span data-f="SO3"></span> no tiene hidrógeno, así que es un <b>óxido ácido</b>. El título correcto es <b>Hidróxido + Óxido ácido</b>. La ecuación está bien.</p>
-        <p class="feq" data-f="2{m|Na}{x|OH} + {a|SO3} → {m|Na2}{a|SO4} + {x|H2O}"></p>
-      </article>
-      <article class="fix">
-        <p class="fix-tag">Caso 6</p>
-        <h3>El ácido nítrico es un ejemplo engañoso</h3>
-        <p>La ecuación está bien balanceada y sirve para aprender el esquema. En la realidad, el <span data-f="HNO3"></span> es oxidante y con los metales suele soltar óxidos de nitrógeno en vez de <span data-f="H2"></span>. Si tu profe lo da así, usalo así en la prueba. Este ejemplo también se cumple en el laboratorio:</p>
-        <p class="feq" data-f="{m|Zn} + {x|H2}{a|SO4} → {m|Zn}{a|SO4} + {x|H2}↑"></p>
-      </article>
-    </div>
-  </section>
+    <section class="sec" aria-labelledby="a1">
+      <div class="sec-head">
+        <p class="eyebrow">La idea</p>
+        <h3 class="sec-title" id="a1">Neutralizar a medias</h3>
+        <p>Si hay menos base de la que hace falta, el ácido entrega solo algunos de sus H<sup>+</sup>. Esos forman agua con los OH<sup>−</sup>; los que no entregó quedan dentro de la sal.</p>
+      </div>
+      <div class="trio">
+        <div><p class="trio-k">Cuándo se puede</p><p>Solo con ácidos que tienen <b>2 o más H</b>: <span data-f="H2SO4, H2CO3, H3PO4, H2S"></span>. Con HCl o <span data-f="HNO3"></span> no se puede, porque tienen un solo H.</p></div>
+        <div><p class="trio-k">Cómo la reconocés</p><p>Aparece un <b>H entre el metal y el no metal</b>: <span data-f="Na{hh|H}SO4, Na{hh|H}CO3, Na{hh|H2}PO4"></span>.</p></div>
+        <div><p class="trio-k">Cómo se nombra</p><p>Con el prefijo <b>hidrogeno-</b> (hidrogenosulfato de sodio) o, en la tradicional, con la palabra <b>ácido</b> (sulfato ácido de sodio).</p></div>
+      </div>
+    </section>
 
-  <footer>Hecho a partir de tus apuntes de sales neutras (casos 1 a 6). Los casos marcados como “Extra” siguen la misma regla y te ayudan a completar la tabla.</footer>
+    <section class="sec" aria-labelledby="a2">
+      <div class="sec-head">
+        <p class="eyebrow">Probalo</p>
+        <h3 class="sec-title" id="a2">Sacale los H de a uno</h3>
+        <p>Elegí un metal y un ácido, y decidí cuántos H le saca la base a cada molécula de ácido. Si saca todos, la sal es neutra. Si saca menos, es ácida.</p>
+      </div>
+      <div class="tool">
+        <div class="pickers">
+          <fieldset><legend>Metal · viene del hidróxido</legend><div class="chips" id="pa-m"></div></fieldset>
+          <fieldset><legend>Ácido</legend><div class="chips" id="pa-a"></div></fieldset>
+        </div>
+        <fieldset><legend>¿Cuántos H le saca la base?</legend><div class="chips" id="pa-r"></div></fieldset>
+        <div class="mol" id="pa-mol"></div>
+        <div class="cross">
+          <div class="cstep"><p class="cstep-k">1 · Anión que queda</p><p class="cform" id="pa-1"></p><p id="pa-1t"></p></div>
+          <div class="cstep"><p class="cstep-k">2 · Cruzá las cargas</p><p class="cform" id="pa-2"></p><p id="pa-2t"></p></div>
+          <div class="cstep final"><p class="cstep-k">3 · La sal</p><p class="cform" id="pa-3"></p><p id="pa-3t"></p></div>
+        </div>
+        <dl class="facts" id="pa-facts"></dl>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="a3">
+      <div class="sec-head">
+        <p class="eyebrow">Para la carpeta</p>
+        <h3 class="sec-title" id="a3">Aniones ácidos y sus nombres</h3>
+        <p>Cada H que el ácido conserva le resta una carga negativa al anión.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Anión</th><th scope="col">Viene de</th><th scope="col">Nombre</th><th scope="col">Tradicional</th><th scope="col">Con sodio</th></tr></thead>
+          <tbody>
+            <tr><td class="f" data-f="{hh|H}{a|SO4^-}"></td><td data-f="H2SO4"></td><td>hidrogenosulfato</td><td>sulfato ácido · bisulfato</td><td class="f" data-f="NaHSO4"></td></tr>
+            <tr><td class="f" data-f="{hh|H}{a|CO3^-}"></td><td data-f="H2CO3"></td><td>hidrogenocarbonato</td><td>carbonato ácido · bicarbonato</td><td class="f" data-f="NaHCO3"></td></tr>
+            <tr><td class="f" data-f="{hh|H}{a|S^-}"></td><td data-f="H2S"></td><td>hidrogenosulfuro</td><td>sulfuro ácido · bisulfuro</td><td class="f" data-f="NaHS"></td></tr>
+            <tr><td class="f" data-f="{hh|H2}{a|PO4^-}"></td><td data-f="H3PO4"></td><td>dihidrogenofosfato</td><td>fosfato diácido</td><td class="f" data-f="NaH2PO4"></td></tr>
+            <tr><td class="f" data-f="{hh|H}{a|PO4^2-}"></td><td data-f="H3PO4"></td><td>hidrogenofosfato</td><td>fosfato monoácido</td><td class="f" data-f="Na2HPO4"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="aside">El bicarbonato de sodio que se usa en la cocina (<span data-f="NaHCO3"></span>) es una sal ácida. Sale de neutralizar uno solo de los dos H del ácido carbónico.</p>
+    </section>
+  </div>
+
+  <!-- ===================== PARTE 3: BÁSICAS ===================== -->
+  <div class="part" id="basicas">
+    <header class="part-head pt-basica">
+      <div class="part-txt">
+        <p class="part-k">Parte 3 de 4</p>
+        <h2>Sales básicas</h2>
+        <p>Faltó ácido. La base no entregó todos sus OH<sup>−</sup>, y los que le quedaron siguen pegados al metal.</p>
+      </div>
+      <p class="part-f" data-f="{m|Mg}{ho|(OH)}{a|Cl}"></p>
+    </header>
+
+    <section class="sec" aria-labelledby="b1">
+      <div class="sec-head">
+        <p class="eyebrow">La idea</p>
+        <h3 class="sec-title" id="b1">Lo mismo, pero del otro lado</h3>
+        <p>Es el espejo de la sal ácida. Si hay menos ácido del que hace falta, la base entrega solo algunos OH<sup>−</sup>. El resto queda en la sal, entre el metal y el anión.</p>
+      </div>
+      <div class="trio">
+        <div><p class="trio-k">Cuándo se puede</p><p>Solo con hidróxidos que tienen <b>2 o más OH</b>: <span data-f="Ca(OH)2, Mg(OH)2, Al(OH)3, Fe(OH)3"></span>. Con NaOH o KOH no se puede, porque tienen un solo OH.</p></div>
+        <div><p class="trio-k">Cómo la reconocés</p><p>Aparece <b>(OH) entre el metal y el anión</b>: <span data-f="Mg{ho|(OH)}Cl, Al{ho|(OH)2}NO3"></span>.</p></div>
+        <div><p class="trio-k">Cómo se nombra</p><p>Con el prefijo <b>hidroxi-</b> (hidroxicloruro de magnesio) o, en la tradicional, con <b>básico</b> (cloruro básico de magnesio). Si quedan dos OH: <b>dihidroxi-</b> o <b>dibásico</b>.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="b2">
+      <div class="sec-head">
+        <p class="eyebrow">Probalo</p>
+        <h3 class="sec-title" id="b2">Sacale los OH de a uno</h3>
+        <p>Elegí un hidróxido y un ácido, y decidí cuántos OH le saca el ácido a cada hidróxido. Si saca todos, la sal es neutra. Si saca menos, es básica.</p>
+      </div>
+      <div class="tool">
+        <div class="pickers">
+          <fieldset><legend>Hidróxido</legend><div class="chips" id="pb-m"></div></fieldset>
+          <fieldset><legend>Ácido · pone el anión</legend><div class="chips" id="pb-a"></div></fieldset>
+        </div>
+        <fieldset><legend>¿Cuántos OH le saca el ácido?</legend><div class="chips" id="pb-r"></div></fieldset>
+        <div class="mol" id="pb-mol"></div>
+        <div class="cross">
+          <div class="cstep"><p class="cstep-k">1 · Catión que queda</p><p class="cform" id="pb-1"></p><p id="pb-1t"></p></div>
+          <div class="cstep"><p class="cstep-k">2 · Cruzá las cargas</p><p class="cform" id="pb-2"></p><p id="pb-2t"></p></div>
+          <div class="cstep final"><p class="cstep-k">3 · La sal</p><p class="cform" id="pb-3"></p><p id="pb-3t"></p></div>
+        </div>
+        <dl class="facts" id="pb-facts"></dl>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="b3">
+      <div class="sec-head">
+        <p class="eyebrow">Para la carpeta</p>
+        <h3 class="sec-title" id="b3">Ejemplos y sus nombres</h3>
+        <p>El prefijo cuenta los OH que quedaron: uno es hidroxi-, dos es dihidroxi-.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Sal</th><th scope="col">Viene de</th><th scope="col">Nombre</th><th scope="col">Tradicional</th></tr></thead>
+          <tbody>
+            <tr><td class="f" data-f="{m|Mg}{ho|(OH)}{a|Cl}"></td><td data-f="Mg(OH)2 + HCl"></td><td>hidroxicloruro de magnesio</td><td>cloruro básico de magnesio</td></tr>
+            <tr><td class="f" data-f="{m|Ca}{ho|(OH)}{a|NO3}"></td><td data-f="Ca(OH)2 + HNO3"></td><td>hidroxinitrato de calcio</td><td>nitrato básico de calcio</td></tr>
+            <tr><td class="f" data-f="{m|Al}{ho|(OH)2}{a|Cl}"></td><td data-f="Al(OH)3 + HCl"></td><td>dihidroxicloruro de aluminio</td><td>cloruro dibásico de aluminio</td></tr>
+            <tr><td class="f" data-f="{m|Al}{ho|(OH)}{a|Cl2}"></td><td data-f="Al(OH)3 + 2HCl"></td><td>hidroxicloruro de aluminio</td><td>cloruro básico de aluminio</td></tr>
+            <tr><td class="f" data-f="{m|Fe}{ho|(OH)}{a|SO4}"></td><td data-f="Fe(OH)3 + H2SO4"></td><td>hidroxisulfato de hierro (III)</td><td>sulfato básico de hierro (III)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="aside">Fijate en las dos sales de aluminio: <span data-f="Al(OH)2Cl"></span> y <span data-f="Al(OH)Cl2"></span> tienen los mismos elementos, pero en una quedaron dos OH y en la otra uno. Por eso cambian el nombre y la cantidad de cloros.</p>
+    </section>
+  </div>
+
+  <!-- ===================== PARTE 4: MIXTAS ===================== -->
+  <div class="part" id="mixtas">
+    <header class="part-head pt-mixta">
+      <div class="part-txt">
+        <p class="part-k">Parte 4 de 4</p>
+        <h2>Sales mixtas</h2>
+        <p>Se neutralizan todos los H del ácido, pero con dos bases de metales distintos. No queda H ni OH, y en la fórmula aparecen dos metales.</p>
+      </div>
+      <p class="part-f" data-f="{m|K}{mm|Na}{a|SO4}"></p>
+    </header>
+
+    <section class="sec" aria-labelledby="m1">
+      <div class="sec-head">
+        <p class="eyebrow">La idea</p>
+        <h3 class="sec-title" id="m1">Cada H lo reemplaza un metal distinto</h3>
+        <p>El ácido tiene varios lugares donde va un metal (uno por cada H). Si esos lugares los ocupan metales diferentes, la sal es mixta.</p>
+      </div>
+      <div class="trio">
+        <div><p class="trio-k">Cuándo se puede</p><p>Con un ácido de <b>2 o más H</b> y <b>dos hidróxidos de metales distintos</b>: <span data-f="NaOH + KOH + H2SO4"></span>.</p></div>
+        <div><p class="trio-k">Cómo la reconocés</p><p>Tiene <b>dos metales distintos</b> y ningún H ni OH extra: <span data-f="{m|K}{mm|Na}SO4"></span>.</p></div>
+        <div><p class="trio-k">Cómo se nombra</p><p>Anión + <b>de</b> + los dos metales unidos con <b>y</b>: sulfato de potasio y sodio (o sulfato doble de potasio y sodio). Los metales se suelen escribir en orden alfabético de símbolo.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="m2">
+      <div class="sec-head">
+        <p class="eyebrow">Probalo</p>
+        <h3 class="sec-title" id="m2">Elegí qué metal va en cada lugar</h3>
+        <p>Elegí un ácido y decidí con qué metal reemplazás cada uno de sus H. Con un solo metal da una sal neutra; con dos o más distintos, una sal mixta.</p>
+      </div>
+      <div class="tool">
+        <fieldset><legend>Ácido</legend><div class="chips" id="pm-a"></div></fieldset>
+        <div class="slots" id="pm-slots"></div>
+        <div class="mol" id="pm-mol"></div>
+        <div class="result" id="pm-out"></div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="m3">
+      <div class="sec-head">
+        <p class="eyebrow">Para la carpeta</p>
+        <h3 class="sec-title" id="m3">Tres ejemplos</h3>
+        <p>Para revisar la fórmula, sumá las cargas: los metales tienen que compensar justo la carga del anión.</p>
+      </div>
+      <div class="ex-cards">
+        <div class="ex-card">
+          <p class="cform" data-f="{m|K}{mm|Na}{a|SO4}"></p>
+          <p class="feq" data-f="{m|K}{x|OH} + {mm|Na}{x|OH} + {x|H2}{a|SO4} → {m|K}{mm|Na}{a|SO4} + 2{x|H2O}"></p>
+          <p>Sulfato de potasio y sodio. Cargas: +1 +1 −2 = 0.</p>
+        </div>
+        <div class="ex-card">
+          <p class="cform" data-f="{m|Ca}{mm|Na}{a|PO4}"></p>
+          <p class="feq" data-f="{m|Ca}{x|(OH)2} + {mm|Na}{x|OH} + {x|H3}{a|PO4} → {m|Ca}{mm|Na}{a|PO4} + 3{x|H2O}"></p>
+          <p>Fosfato de calcio y sodio. Cargas: +2 +1 −3 = 0.</p>
+        </div>
+        <div class="ex-card">
+          <p class="cform" data-f="{m|K}{mm|Al}{a|(SO4)2}"></p>
+          <p class="feq" data-f="{m|K}{x|OH} + {mm|Al}{x|(OH)3} + 2{x|H2}{a|SO4} → {m|K}{mm|Al}{a|(SO4)2} + 4{x|H2O}"></p>
+          <p>Sulfato de aluminio y potasio: el alumbre, que se usa para potabilizar agua. Cargas: +1 +3 −4 = 0. También se escribe <span data-f="AlK(SO4)2"></span>.</p>
+        </div>
+      </div>
+      <p class="aside">Algunos libros también llaman mixtas a las sales con dos aniones distintos. Si tu profe usa esa definición, la idea es la misma: dos tipos de ion donde normalmente hay uno.</p>
+    </section>
+  </div>
+
+  <!-- ===================== EJERCICIOS ===================== -->
+  <div class="part" id="ejercicios">
+    <header class="part-head pt-ej">
+      <div class="part-txt">
+        <p class="part-k">Para cerrar</p>
+        <h2>Ejercicios</h2>
+        <p>Un resumen de las cuatro sales, práctica con corrección automática y ejercicios para resolver en la carpeta.</p>
+      </div>
+    </header>
+
+    <section class="sec" aria-labelledby="e1">
+      <div class="sec-head">
+        <p class="eyebrow">Resumen para la prueba</p>
+        <h3 class="sec-title" id="e1">Las cuatro, lado a lado</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">Tipo</th><th scope="col">Qué queda en la fórmula</th><th scope="col">Se forma cuando</th><th scope="col">Ejemplo</th><th scope="col">Nombre</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" style="color:var(--neutral)">Neutra</th><td>Nada</td><td>Se neutralizan todos los H y todos los OH</td><td class="f" data-f="{m|Na2}{a|SO4}"></td><td>sulfato de sodio</td></tr>
+            <tr><th scope="row" style="color:var(--acid)">Ácida</th><td>H del ácido</td><td>Falta base (ácido con 2 o más H)</td><td class="f" data-f="{m|Na}{hh|H}{a|SO4}"></td><td>hidrogenosulfato de sodio · sulfato ácido de sodio</td></tr>
+            <tr><th scope="row" style="color:var(--base)">Básica</th><td>OH de la base</td><td>Falta ácido (hidróxido con 2 o más OH)</td><td class="f" data-f="{m|Mg}{ho|(OH)}{a|Cl}"></td><td>hidroxicloruro de magnesio · cloruro básico de magnesio</td></tr>
+            <tr><th scope="row" style="color:var(--mix)">Mixta</th><td>Dos metales distintos</td><td>Dos bases distintas neutralizan un ácido con 2 o más H</td><td class="f" data-f="{m|K}{mm|Na}{a|SO4}"></td><td>sulfato de potasio y sodio</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="e2">
+      <div class="sec-head">
+        <p class="eyebrow">Práctica con corrección</p>
+        <h3 class="sec-title" id="e2">¿Cuánto sabés?</h3>
+        <p>Elegí qué practicar. Cada tanda mezcla las preguntas en otro orden.</p>
+      </div>
+      <fieldset><legend>Qué practicar</legend><div class="chips" id="ex-tabs"></div></fieldset>
+      <div class="quiz" id="exq"></div>
+    </section>
+
+    <section class="sec" aria-labelledby="e3">
+      <div class="sec-head">
+        <p class="eyebrow">Para hacer en la carpeta</p>
+        <h3 class="sec-title" id="e3">Escribí, balanceá y nombrá</h3>
+        <p>Resolvé cada uno en papel antes de abrir la respuesta.</p>
+      </div>
+      <div class="hw">
+        <div class="hw-group">
+          <h4>A · Completá la reacción, nombrá la sal y decí de qué tipo es</h4>
+          <ol class="hw-list">
+            <li><p class="hw-q" data-f="KOH + H2SO4 → ?"></p><p class="hw-hint">Una molécula de cada uno.</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{x|OH} + {x|H}{hh|H}{a|SO4} → {m|K}{hh|H}{a|SO4} + {x|H2O}"></p><p>Hidrogenosulfato de potasio (sulfato ácido de potasio). <b>Ácida</b>: un solo OH saca un solo H.</p></div></details></li>
+            <li><p class="hw-q" data-f="Ca(OH)2 + HCl → ?"></p><p class="hw-hint">Una molécula de cada uno.</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{ho|(OH)}{x|(OH)} + {x|H}{a|Cl} → {m|Ca}{ho|(OH)}{a|Cl} + {x|H2O}"></p><p>Hidroxicloruro de calcio (cloruro básico de calcio). <b>Básica</b>: un solo H saca un solo OH.</p></div></details></li>
+            <li><p class="hw-q" data-f="2NaOH + H3PO4 → ?"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="2{m|Na}{x|OH} + {x|H3}{a|PO4} → {m|Na2}{hh|H}{a|PO4} + 2{x|H2O}"></p><p>Hidrogenofosfato de sodio (fosfato monoácido de sodio). <b>Ácida</b>: se fueron 2 de los 3 H.</p></div></details></li>
+            <li><p class="hw-q" data-f="LiOH + NaOH + H2CO3 → ?"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Li}{x|OH} + {mm|Na}{x|OH} + {x|H2}{a|CO3} → {m|Li}{mm|Na}{a|CO3} + 2{x|H2O}"></p><p>Carbonato de litio y sodio. <b>Mixta</b>: cada H lo reemplazó un metal distinto.</p></div></details></li>
+            <li><p class="hw-q" data-f="Fe(OH)3 + H2SO4 → ?"></p><p class="hw-hint">Una molécula de cada uno.</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Fe}{x|(OH)3} + {x|H2}{a|SO4} → {m|Fe}{ho|(OH)}{a|SO4} + 2{x|H2O}"></p><p>Hidroxisulfato de hierro (III) (sulfato básico de hierro (III)). <b>Básica</b>: dos H sacan dos de los tres OH. Cargas: +3 −1 −2 = 0.</p></div></details></li>
+            <li><p class="hw-q" data-f="Mg(OH)2 + 2H2S → ?"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Mg}{x|(OH)2} + 2{x|H2}{a|S} → {m|Mg}{a|(}{hh|H}{a|S)2} + 2{x|H2O}"></p><p>Hidrogenosulfuro de magnesio (sulfuro ácido de magnesio). <b>Ácida</b>: cada H₂S pierde un solo H y queda HS<sup>−</sup>; el magnesio (2+) necesita dos.</p></div></details></li>
+          </ol>
+        </div>
+        <div class="hw-group">
+          <h4>B · Escribí la fórmula</h4>
+          <ol class="hw-list">
+            <li><p class="hw-q">hidrogenocarbonato de calcio</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{a|(}{hh|H}{a|CO3)2}"></p><p>HCO₃<sup>−</sup> tiene carga 1− y el calcio 2+, así que van dos aniones. Es la sal que endurece el agua.</p></div></details></li>
+            <li><p class="hw-q">dihidroxinitrato de aluminio</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Al}{ho|(OH)2}{a|NO3}"></p><p>Cargas: +3 (Al) −2 (dos OH) −1 (NO₃) = 0.</p></div></details></li>
+            <li><p class="hw-q">fosfato de calcio y sodio</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{mm|Na}{a|PO4}"></p><p>Cargas: +2 (Ca) +1 (Na) −3 (PO₄) = 0. Sal mixta.</p></div></details></li>
+            <li><p class="hw-q">dihidrogenofosfato de potasio</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{hh|H2}{a|PO4}"></p><p>Quedan 2 de los 3 H del ácido fosfórico: H₂PO₄<sup>−</sup> (carga 1−), igual que el K<sup>+</sup>.</p></div></details></li>
+            <li><p class="hw-q">sulfato de aluminio y potasio (alumbre)</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{mm|Al}{a|(SO4)2}"></p><p>Cargas: +1 +3 = +4, así que hacen falta dos sulfatos (−4). También se escribe AlK(SO₄)₂.</p></div></details></li>
+          </ol>
+        </div>
+        <div class="hw-group">
+          <h4>C · Nombrá y clasificá</h4>
+          <ol class="hw-list">
+            <li><p class="hw-q" data-f="NaHSO4"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p>Hidrogenosulfato de sodio (sulfato ácido de sodio o bisulfato de sodio). <b>Ácida</b>.</p></div></details></li>
+            <li><p class="hw-q" data-f="Mg(OH)NO3"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p>Hidroxinitrato de magnesio (nitrato básico de magnesio). <b>Básica</b>.</p></div></details></li>
+            <li><p class="hw-q" data-f="K2SO4"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p>Sulfato de potasio. <b>Neutra</b>: un solo metal, sin H ni OH.</p></div></details></li>
+            <li><p class="hw-q" data-f="KNaCO3"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p>Carbonato de potasio y sodio. <b>Mixta</b>.</p></div></details></li>
+            <li><p class="hw-q" data-f="Al(OH)Cl2"></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p>Hidroxicloruro de aluminio (cloruro básico de aluminio). <b>Básica</b>: queda un solo OH.</p></div></details></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>Hecho a partir de tus apuntes de sales neutras (casos 1 a 6) y ampliado con sales ácidas, básicas y mixtas. Los casos marcados como “Extra” en la tabla de neutras siguen la misma regla.</footer>
 </main>
 
 <script>
 (() => {
   const $ = s => document.querySelector(s);
 
-  /* Mini-notación: {m|Na} metal, {a|SO4} anión, {x|H2O} lo que sobra.
-     Dígitos después de una letra o ")" → subíndice. ^2- / ^+ → carga. "||" → separador "y". */
+  /* Mini-notación: {m|Na} metal, {mm|K} segundo metal, {a|SO4} anión, {x|H2O} lo que sale como agua,
+     {hh|H} H que queda (sal ácida), {ho|(OH)} OH que queda (sal básica).
+     Dígitos después de una letra, ")" o "]" → subíndice. ^2- / ^+ → carga. "||" → separador "y". */
   const fmt = s => String(s)
-    .replace(/\{(\w)\|([^}]*)\}/g, (_, c, t) => `<span class="${c}">${t}</span>`)
+    .replace(/\{(\w+)\|([^}]*)\}/g, (_, c, t) => `<span class="${c}">${t}</span>`)
     .replace(/\|\|/g, '<span class="sep">y</span>')
-    .replace(/([A-Za-z)])(\d+)/g, '$1<sub>$2</sub>')
+    .replace(/([A-Za-z)\]])(\d+)/g, '$1<sub>$2</sub>')
     .replace(/\^(\d*)([+-])/g, (_, n, sg) => `<sup>${n}${sg === '-' ? '−' : '+'}</sup>`);
+
+  const gcd = (a, b) => b ? gcd(b, a % b) : a;
+  const chg = (q, sg) => (q > 1 ? q : '') + sg;
+  const co = n => n > 1 ? String(n) : '';
+  const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const radio = (name, id, value, checked, label, cls) =>
+    `<span class="chip ${cls}"><input type="radio" name="${name}" id="${id}" value="${value}"${checked ? ' checked' : ''}><label for="${id}">${label}</label></span>`;
+  const TYPE = {
+    neutra: { l: 'Sal neutra', c: 't-neutra' }, acida: { l: 'Sal ácida', c: 't-acida' },
+    basica: { l: 'Sal básica', c: 't-basica' }, mixta: { l: 'Sal mixta', c: 't-mixta' }
+  };
+  const pill = t => `<span class="pill ${TYPE[t].c}">${TYPE[t].l}</span>`;
 
   document.querySelectorAll('[data-f]').forEach(el => { el.innerHTML = fmt(el.dataset.f); });
 
-  /* ---------------- Tabla de combinaciones ---------------- */
+  /* ================= NEUTRAS: tabla de combinaciones ================= */
   const BASES = [
     { id: 'hidroxido', name: 'Hidróxido', ej: 'NaOH', trae: 'trae OH', si: true },
     { id: 'oxbasico', name: 'Óxido básico', ej: 'Na2O', trae: 'trae O', si: true },
@@ -425,9 +862,8 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     agua: { l: 'Sal + agua', long: 'Sal + agua', res: 'sal + agua', c: 'o-agua', say: 'sal más agua' },
     h2:   { l: 'Sal + H2', long: 'Sal + hidrógeno (H2↑)', res: 'sal + hidrógeno (H2↑)', c: 'o-h2', say: 'sal más hidrógeno' },
     sola: { l: 'Solo sal', long: 'Solo sal, sin agua', res: 'solo sal', c: 'o-sola', say: 'solo sal' },
-    no:   { l: 'No aplica', long: 'No forma sal neutra', c: 'o-no', say: 'no aplica' }
+    no:   { l: 'No aplica', long: 'No forma sal neutra', res: 'nada', c: 'o-no', say: 'no aplica' }
   };
-
   const COMBOS = {
     'hidroxido|oxoacido': {
       caso: 1, out: 'agua',
@@ -519,7 +955,6 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       why: 'Esta combinación no se usa para formar sales neutras. Un metal suelto necesita los H^+ de un ácido para desplazarlos, y el óxido ácido no tiene ninguno. No la vas a ver en este tema.'
     }
   };
-
   const tagFor = c => c.caso ? 'Caso ' + c.caso : (c.out === 'no' ? '—' : 'Extra');
 
   function buildMatrix() {
@@ -534,8 +969,8 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     for (const b of BASES) {
       h += `<tr><th scope="row" class="hd hd-b"><span class="hname">${b.name}</span><span class="hej">${fmt(b.ej)}</span><span class="trae ${b.si ? 'si' : 'no'}">${b.trae}</span></th>`;
       for (const a of ACIDS) {
-        const k = b.id + '|' + a.id, c = COMBOS[k], o = OUT[c.out];
-        h += `<td><button type="button" class="cell ${o.c}" data-k="${k}" aria-pressed="false" aria-label="${b.name} más ${a.name}: ${o.say}. ${tagFor(c) === '—' ? '' : tagFor(c)}"><span class="cell-out">${fmt(o.l)}</span><span class="cell-tag">${tagFor(c)}</span></button></td>`;
+        const k = b.id + '|' + a.id, c = COMBOS[k], o = OUT[c.out], tg = tagFor(c);
+        h += `<td><button type="button" class="cell ${o.c}" data-k="${k}" aria-pressed="false" aria-label="${b.name} más ${a.name}: ${o.say}. ${tg === '—' ? '' : tg}"><span class="cell-out">${fmt(o.l)}</span><span class="cell-tag">${tg}</span></button></td>`;
       }
       h += '</tr>';
     }
@@ -552,7 +987,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     const b = BASES.find(x => x.id === bi), a = ACIDS.find(x => x.id === ai);
     const c = COMBOS[k], o = OUT[c.out];
     const tag = c.caso ? `Caso ${c.caso} de tus apuntes` : (c.out === 'no' ? 'No va en este tema' : 'Extra: no está en tus apuntes');
-    let h = `<div class="detail-head"><h3><span class="m">${b.name}</span> + <span class="a">${a.name}</span></h3>` +
+    let h = `<div class="detail-head"><h4><span class="m">${b.name}</span> + <span class="a">${a.name}</span></h4>` +
       `<div class="badges"><span class="tag">${tag}</span><span class="pill ${o.c}">${fmt(o.long)}</span></div></div>`;
     if (c.eq) {
       h += `<p class="big-eq">${fmt(c.eq)}</p>`;
@@ -569,7 +1004,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     if (animate) { d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap'); }
   }
 
-  /* ---------------- Armar la fórmula ---------------- */
+  /* ================= NEUTRAS: armar la fórmula ================= */
   const CATS = [
     { s: 'Na', q: 1, n: 'sodio' }, { s: 'K', q: 1, n: 'potasio' },
     { s: 'Ca', q: 2, n: 'calcio' }, { s: 'Mg', q: 2, n: 'magnesio' }, { s: 'Zn', q: 2, n: 'zinc' },
@@ -584,17 +1019,12 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     { s: 'PO4', q: 3, n: 'fosfato', poly: true, acid: 'H3PO4', an: 'ácido fosfórico', nm: 'P', o: 4 }
   ];
   const st = { cat: 'Na', an: 'SO4' };
-  const gcd = (a, b) => b ? gcd(b, a % b) : a;
-  const chg = (q, sg) => (q > 1 ? q : '') + sg;
-  const co = n => n > 1 ? String(n) : '';
 
   function buildBuilder() {
     $('#cats').innerHTML = CATS.map(c =>
-      `<span class="chip chip-b"><input type="radio" name="cat" id="cat-${c.s}" value="${c.s}"${c.s === st.cat ? ' checked' : ''}><label for="cat-${c.s}"><span>${c.s}<sup>${chg(c.q, '+')}</sup></span><small>${c.n.replace(' (III)', '')}</small></label></span>`
-    ).join('');
+      radio('cat', 'cat-' + c.s, c.s, c.s === st.cat, `<span>${c.s}<sup>${chg(c.q, '+')}</sup></span><small>${c.n.replace(' (III)', '')}</small>`, 'chip-b')).join('');
     $('#ans').innerHTML = ANS.map(a =>
-      `<span class="chip chip-a"><input type="radio" name="an" id="an-${a.s}" value="${a.s}"${a.s === st.an ? ' checked' : ''}><label for="an-${a.s}"><span>${fmt(a.s)}<sup>${chg(a.q, '−')}</sup></span><small>${a.n}</small></label></span>`
-    ).join('');
+      radio('an', 'an-' + a.s, a.s, a.s === st.an, `<span>${fmt(a.s)}<sup>${chg(a.q, '−')}</sup></span><small>${a.n}</small>`, 'chip-a')).join('');
     $('#cats').addEventListener('change', e => { st.cat = e.target.value; renderBuilder(); });
     $('#ans').addEventListener('change', e => { st.an = e.target.value; renderBuilder(); });
   }
@@ -603,30 +1033,22 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     const c = CATS.find(x => x.s === st.cat), a = ANS.find(x => x.s === st.an);
     const g = gcd(c.q, a.q), nc = a.q / g, na = c.q / g;
     const aF = fmt(a.s);
-
     $('#c1').innerHTML = `<span class="m">${c.s}</span><sup class="qb">${chg(c.q, '+')}</sup><span class="gap"></span><span class="a">${aF}</span><sup class="qa">${chg(a.q, '−')}</sup>`;
-
     const aP = a.poly ? `(${aF})` : aF;
     $('#c2').innerHTML = `<span class="m">${c.s}</span><sub class="qa">${a.q}</sub><span class="a">${aP}</span><sub class="qb">${c.q}</sub>`;
     $('#c2t').innerHTML = `El <b class="a">${a.q}</b> del ${aF} baja como subíndice del ${c.s}. El <b class="m">${c.q}</b> del ${c.s} baja como subíndice del ${aF}.`;
-
     const anPart = a.poly && na > 1 ? `(${a.s})${na}` : a.s + co(na);
     const salt = `{m|${c.s}${co(nc)}}{a|${anPart}}`;
     $('#c3').innerHTML = fmt(salt);
-    const parts = [];
-    parts.push(g > 1 ? `Dividí los dos subíndices por ${g}.` : 'No se puede simplificar.');
+    const parts = [g > 1 ? `Dividí los dos subíndices por ${g}.` : 'No se puede simplificar.'];
     if (nc === 1 || na === 1) parts.push('Los subíndices 1 no se escriben' + (a.poly && na === 1 ? ' y el paréntesis se saca.' : '.'));
     $('#c3t').textContent = parts.join(' ');
-
     const ox = a.poly
       ? `En ${fmt(a.acid)}: ${a.q}·(+1) + x + ${a.o}·(−2) = 0 → <b>x = +${2 * a.o - a.q}</b>`
       : `En ${fmt(a.acid)}: ${a.q}·(+1) + x = 0 → <b>x = −${a.q}</b>`;
     const hyd = c.q > 1 ? `{m|${c.s}}{x|(OH)${c.q}}` : `{m|${c.s}}{x|OH}`;
-    const acid = `{x|H${co(a.q)}}{a|${a.s}}`;
-    const water = c.q * nc;
-    const eq = `${co(nc)}${hyd} + ${co(na)}${acid} → ${salt} + ${co(water)}{x|H2O}`;
+    const eq = `${co(nc)}${hyd} + ${co(na)}{x|H${co(a.q)}}{a|${a.s}} → ${salt} + ${co(c.q * nc)}{x|H2O}`;
     const unstable = c.q === 3 && (a.s === 'CO3' || a.s === 'S');
-
     $('#facts').innerHTML =
       `<dt>Nombre</dt><dd><b>${a.n} de ${c.n}</b></dd>` +
       `<dt>Tipo de sal</dt><dd>${a.poly
@@ -638,7 +1060,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       (unstable ? '<span class="note">En los ejercicios se escribe así, pero en la realidad esta sal se descompone en agua.</span>' : '') + '</dd>';
   }
 
-  /* ---------------- Práctica ---------------- */
+  /* ================= NEUTRAS: práctica ================= */
   const TYPES = [
     'Hidróxido + Oxoácido', 'Hidróxido + Hidrácido', 'Hidróxido + Óxido ácido',
     'Óxido básico + Oxoácido', 'Óxido básico + Hidrácido', 'Óxido básico + Óxido ácido',
@@ -663,7 +1085,6 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     { r: 'K2O + SO3', eq: '{m|K2}O + {a|SO3} → {m|K2}{a|SO4}', tipo: 'Óxido básico + Óxido ácido', out: 'sola',
       why: 'Dos óxidos, ningún hidrógeno. No sobra nada.' }
   ];
-  const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   let qz;
 
   function startQuiz(focus) {
@@ -701,24 +1122,20 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       `<div class="qreveal" id="qrev" aria-live="polite"></div>`;
 
     const answer = (part, right, after) => e => {
-      const btn = e.target.closest('.opt'); if (!btn) return;
+      const btn = e.target.closest('.opt'); if (!btn || btn.disabled) return;
       const ok = btn.dataset.v === right;
-      part.querySelectorAll('.opt').forEach(o => {
-        o.disabled = true;
-        if (o.dataset.v === right) o.classList.add('ok');
-      });
+      part.querySelectorAll('.opt').forEach(o => { o.disabled = true; if (o.dataset.v === right) o.classList.add('ok'); });
       if (!ok) btn.classList.add('bad');
       if (ok) { qz.score++; $('#qscore').textContent = qz.score; }
       after(ok);
     };
-
     const p1 = $('#qp1'), p2 = $('#qp2');
     p1.addEventListener('click', answer(p1, q.tipo, ok => {
       const m = $('#qm1');
       m.className = 'qmini ' + (ok ? 'good' : 'bad');
       m.textContent = ok ? 'Bien reconocido.' : `Era ${q.tipo}.`;
       p2.hidden = false;
-    }), { once: false });
+    }));
     p2.addEventListener('click', answer(p2, q.out, ok => {
       $('#qreact').innerHTML = fmt(q.eq);
       const last = qz.i === N - 1;
@@ -731,10 +1148,318 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     if (focus) $('#qreact').focus();
   }
 
+  /* ================= ÁCIDAS: sacar H de a uno ================= */
+  const PA_M = [{ s: 'Na', q: 1, n: 'sodio' }, { s: 'K', q: 1, n: 'potasio' }, { s: 'Ca', q: 2, n: 'calcio' }, { s: 'Mg', q: 2, n: 'magnesio' }];
+  const PA_A = [
+    { id: 'HCl', h: 1, A: 'Cl', poly: false, n: 'cloruro' },
+    { id: 'HNO3', h: 1, A: 'NO3', poly: true, n: 'nitrato' },
+    { id: 'H2S', h: 2, A: 'S', poly: false, n: 'sulfuro' },
+    { id: 'H2CO3', h: 2, A: 'CO3', poly: true, n: 'carbonato' },
+    { id: 'H2SO4', h: 2, A: 'SO4', poly: true, n: 'sulfato' },
+    { id: 'H3PO4', h: 3, A: 'PO4', poly: true, n: 'fosfato' }
+  ];
+  const pa = { m: 'Na', a: 'H3PO4', r: 1 };
+
+  function paRChips() {
+    const A = PA_A.find(x => x.id === pa.a);
+    $('#pa-r').innerHTML = Array.from({ length: A.h }, (_, i) => i + 1).map(r => {
+      const left = A.h - r;
+      const small = left === 0 ? 'todos' : `queda${left > 1 ? 'n' : ''} ${left}`;
+      return radio('pa-r', 'pa-r-' + r, r, r === pa.r, `<span>${r} H</span><small>${small}</small>`, 'chip-n');
+    }).join('');
+  }
+
+  function buildPA() {
+    $('#pa-m').innerHTML = PA_M.map(m => radio('pa-m', 'pa-m-' + m.s, m.s, m.s === pa.m, `<span>${m.s}<sup>${chg(m.q, '+')}</sup></span><small>${m.n}</small>`, 'chip-b')).join('');
+    $('#pa-a').innerHTML = PA_A.map(a => radio('pa-a', 'pa-a-' + a.id, a.id, a.id === pa.a, `<span>${fmt(a.id)}</span><small>${a.h} H</small>`, 'chip-a')).join('');
+    paRChips();
+    $('#pa-m').addEventListener('change', e => { pa.m = e.target.value; renderPA(); });
+    $('#pa-a').addEventListener('change', e => { pa.a = e.target.value; pa.r = 1; paRChips(); renderPA(); });
+    $('#pa-r').addEventListener('change', e => { pa.r = +e.target.value; renderPA(); });
+  }
+
+  function renderPA() {
+    const M = PA_M.find(x => x.s === pa.m), A = PA_A.find(x => x.id === pa.a);
+    const r = pa.r, k = A.h - r, poly = k > 0 || A.poly;
+    let row = '';
+    for (let i = 0; i < A.h; i++) {
+      const gone = i < r;
+      row += `<span class="hb ${gone ? 'gone' : 'keep'}"><b>H</b><small>${gone ? 'sale' : 'queda'}</small></span>`;
+    }
+    row += `<span class="mol-core a">${fmt(A.A)}</span>`;
+    const cap = `${r === 1 ? '1 H se va' : r + ' H se van'} con los OH<sup>−</sup> de la base y ${r === 1 ? 'forma' : 'forman'} agua. ` +
+      (k > 0 ? `${k === 1 ? 'Queda 1 H' : 'Quedan ' + k + ' H'} en el anión.` : 'No queda ningún H.');
+    $('#pa-mol').innerHTML = `<p class="mol-k">Una molécula de ${fmt(A.id)}</p><div class="mol-row">${row}</div><p class="mol-cap">${cap}</p>` +
+      (A.h === 1 ? `<p class="callout warn"><b>Con este ácido no hay sal ácida.</b> El ${fmt(A.id)} tiene un solo H: o se neutraliza ese H, o no pasa nada.</p>` : '');
+
+    const anM = k > 0 ? `{hh|H${co(k)}}{a|${A.A}}` : `{a|${A.A}}`;
+    $('#pa-1').innerHTML = fmt(anM) + `<sup class="qa">${chg(r, '−')}</sup>`;
+    $('#pa-1t').textContent = k > 0
+      ? `Cada H que se va deja una carga negativa. Se ${r === 1 ? 'fue 1' : 'fueron ' + r}, así que la carga es ${r}−.`
+      : `Se fueron todos los H: es el anión ${A.n} de siempre.`;
+
+    const anP = poly ? `(${fmt(anM)})` : fmt(anM);
+    $('#pa-2').innerHTML = `<span class="m">${M.s}</span><sub class="qa">${r}</sub>${anP}<sub class="qb">${M.q}</sub>`;
+    $('#pa-2t').innerHTML = `La carga del anión (<b class="a">${r}</b>) baja al ${M.s}. La del ${M.s} (<b class="m">${M.q}</b>) baja al anión.`;
+
+    const g = gcd(M.q, r), nM = r / g, nA = M.q / g;
+    const anPart = nA > 1 ? (poly ? `(${anM})${nA}` : `{a|${A.A}${nA}}`) : anM;
+    const salt = `{m|${M.s}${co(nM)}}${anPart}`;
+    const type = k > 0 ? 'acida' : 'neutra';
+    $('#pa-3').innerHTML = fmt(salt);
+    $('#pa-3t').innerHTML = pill(type) + ' ' + (g > 1 ? `Simplificaste por ${g}. ` : '') +
+      (k > 0 ? 'Quedó H en el anión.' : 'No quedó ningún H.');
+
+    const pre = ['', 'hidrogeno', 'dihidrogeno'];
+    const name = `${pre[k]}${A.n} de ${M.n}`;
+    let trad;
+    if (k === 0) trad = name;
+    else if (A.h === 2) trad = `${A.n} ácido de ${M.n} (o bi${A.n} de ${M.n})`;
+    else trad = `${A.n} ${k === 1 ? 'monoácido' : 'diácido'} de ${M.n}`;
+    const hyd = M.q > 1 ? `{m|${M.s}}{x|(OH)${M.q}}` : `{m|${M.s}}{x|OH}`;
+    const eq = `${co(nM)}${hyd} + ${co(nA)}{x|H${co(A.h)}}{a|${A.A}} → ${salt} + ${co(nM * M.q)}{x|H2O}`;
+    $('#pa-facts').innerHTML =
+      `<dt>Nombre</dt><dd><b>${name}</b></dd>` +
+      `<dt>Tradicional</dt><dd>${trad}</dd>` +
+      `<dt>Reacción</dt><dd><span class="feq">${fmt(eq)}</span></dd>`;
+  }
+
+  /* ================= BÁSICAS: sacar OH de a uno ================= */
+  const PB_M = [
+    { s: 'Na', q: 1, n: 'sodio' }, { s: 'Ca', q: 2, n: 'calcio' }, { s: 'Mg', q: 2, n: 'magnesio' },
+    { s: 'Al', q: 3, n: 'aluminio' }, { s: 'Fe', q: 3, n: 'hierro (III)' }
+  ];
+  const PB_A = [
+    { id: 'HCl', a: 1, A: 'Cl', poly: false, n: 'cloruro' },
+    { id: 'HNO3', a: 1, A: 'NO3', poly: true, n: 'nitrato' },
+    { id: 'H2SO4', a: 2, A: 'SO4', poly: true, n: 'sulfato' }
+  ];
+  const pb = { m: 'Mg', a: 'HCl', r: 1 };
+  const hydF = M => M.q > 1 ? `${M.s}(OH)${M.q}` : `${M.s}OH`;
+
+  function pbRChips() {
+    const M = PB_M.find(x => x.s === pb.m);
+    $('#pb-r').innerHTML = Array.from({ length: M.q }, (_, i) => i + 1).map(r => {
+      const left = M.q - r;
+      const small = left === 0 ? 'todos' : `queda${left > 1 ? 'n' : ''} ${left}`;
+      return radio('pb-r', 'pb-r-' + r, r, r === pb.r, `<span>${r} OH</span><small>${small}</small>`, 'chip-n');
+    }).join('');
+  }
+
+  function buildPB() {
+    $('#pb-m').innerHTML = PB_M.map(m => radio('pb-m', 'pb-m-' + m.s, m.s, m.s === pb.m, `<span>${fmt(hydF(m))}</span><small>${m.q} OH</small>`, 'chip-b')).join('');
+    $('#pb-a').innerHTML = PB_A.map(a => radio('pb-a', 'pb-a-' + a.id, a.id, a.id === pb.a, `<span>${fmt(a.id)}</span><small>${a.n}</small>`, 'chip-a')).join('');
+    pbRChips();
+    $('#pb-m').addEventListener('change', e => { pb.m = e.target.value; pb.r = 1; pbRChips(); renderPB(); });
+    $('#pb-a').addEventListener('change', e => { pb.a = e.target.value; renderPB(); });
+    $('#pb-r').addEventListener('change', e => { pb.r = +e.target.value; renderPB(); });
+  }
+
+  function renderPB() {
+    const M = PB_M.find(x => x.s === pb.m), A = PB_A.find(x => x.id === pb.a);
+    const r = pb.r, k = M.q - r;
+    let row = `<span class="mol-core m">${M.s}</span>`;
+    for (let i = 0; i < M.q; i++) {
+      const gone = i < r;
+      row += `<span class="hb oh ${gone ? 'gone' : 'keepo'}"><b>OH</b><small>${gone ? 'sale' : 'queda'}</small></span>`;
+    }
+    const cap = `${r === 1 ? '1 OH se va' : r + ' OH se van'} con los H<sup>+</sup> del ácido y ${r === 1 ? 'forma' : 'forman'} agua. ` +
+      (k > 0 ? `${k === 1 ? 'Queda 1 OH' : 'Quedan ' + k + ' OH'} pegado${k > 1 ? 's' : ''} al metal.` : 'No queda ningún OH.');
+    $('#pb-mol').innerHTML = `<p class="mol-k">Una unidad de ${fmt(hydF(M))}</p><div class="mol-row">${row}</div><p class="mol-cap">${cap}</p>` +
+      (M.q === 1 ? `<p class="callout warn"><b>Con este hidróxido no hay sal básica.</b> El NaOH tiene un solo OH: o se neutraliza ese OH, o no pasa nada.</p>` : '');
+
+    const unitM = k > 0 ? `{m|${M.s}}{ho|(OH)${co(k)}}` : `{m|${M.s}}`;
+    $('#pb-1').innerHTML = fmt(unitM) + `<sup class="qb">${chg(r, '+')}</sup>`;
+    $('#pb-1t').textContent = k > 0
+      ? `Cada OH que se va deja una carga positiva. Se ${r === 1 ? 'fue 1' : 'fueron ' + r}, así que la carga es ${r}+.`
+      : `Se fueron todos los OH: queda el ion ${M.s} con su carga de siempre.`;
+
+    const unitBr = k > 0 ? `[${fmt(unitM)}]` : fmt(unitM);
+    const anP = A.poly ? `(${fmt(`{a|${A.A}}`)})` : fmt(`{a|${A.A}}`);
+    $('#pb-2').innerHTML = `${unitBr}<sub class="qa">${A.a}</sub>${anP}<sub class="qb">${r}</sub>`;
+    $('#pb-2t').innerHTML = `La carga del anión (<b class="a">${A.a}</b>) baja al catión. La del catión (<b class="m">${r}</b>) baja al anión.`;
+
+    const g = gcd(r, A.a), nU = A.a / g, nA = r / g;
+    const unitPart = nU > 1 ? (k > 0 ? `[${unitM}]${nU}` : `{m|${M.s}${nU}}`) : unitM;
+    const anPart = nA > 1 ? (A.poly ? `({a|${A.A}})${nA}` : `{a|${A.A}${nA}}`) : `{a|${A.A}}`;
+    const salt = unitPart + anPart;
+    const type = k > 0 ? 'basica' : 'neutra';
+    $('#pb-3').innerHTML = fmt(salt);
+    $('#pb-3t').innerHTML = pill(type) + ' ' + (g > 1 ? `Simplificaste por ${g}. ` : '') +
+      (k > 0 ? 'Quedó OH pegado al metal.' : 'No quedó ningún OH.');
+
+    let name, trad;
+    if (k === 0) { name = trad = `${A.n} de ${M.n}`; }
+    else {
+      trad = `${A.n} ${k === 1 ? 'básico' : 'dibásico'} de ${M.n}`;
+      name = nU === 1 ? `${k === 1 ? 'hidroxi' : 'dihidroxi'}${A.n} de ${M.n}` : 'Para esta fórmula se usa el nombre tradicional.';
+    }
+    const eq = `${co(nU)}{m|${M.s}}{x|${M.q > 1 ? '(OH)' + M.q : 'OH'}} + ${co(nA)}{x|H${co(A.a)}}{a|${A.A}} → ${salt} + ${co(nU * r)}{x|H2O}`;
+    $('#pb-facts').innerHTML =
+      `<dt>Nombre</dt><dd><b>${name}</b></dd>` +
+      `<dt>Tradicional</dt><dd>${trad}</dd>` +
+      `<dt>Reacción</dt><dd><span class="feq">${fmt(eq)}</span>` +
+      (nU > 1 ? '<span class="note">Fórmula poco común en los ejercicios. Casi siempre te van a dar casos que quedan con una sola unidad, como Al(OH)SO₄.</span>' : '') + '</dd>';
+  }
+
+  /* ================= MIXTAS: un metal por cada H ================= */
+  const PM_A = [
+    { id: 'H2S', h: 2, A: 'S', n: 'sulfuro' }, { id: 'H2CO3', h: 2, A: 'CO3', n: 'carbonato' },
+    { id: 'H2SO4', h: 2, A: 'SO4', n: 'sulfato' }, { id: 'H3PO4', h: 3, A: 'PO4', n: 'fosfato' }
+  ];
+  const PM_M = [{ s: 'Li', n: 'litio' }, { s: 'Na', n: 'sodio' }, { s: 'K', n: 'potasio' }];
+  const pm = { a: 'H2SO4', slots: ['Na', 'K'] };
+  const MCLS = ['m', 'mm', 'mt'];
+
+  function pmSlots() {
+    const A = PM_A.find(x => x.id === pm.a);
+    while (pm.slots.length < A.h) pm.slots.push(pm.slots.length === 2 ? 'Li' : 'Na');
+    pm.slots = pm.slots.slice(0, A.h);
+    $('#pm-slots').innerHTML = pm.slots.map((v, i) =>
+      `<div class="slot"><p class="slot-k" id="pm-l${i}">H n.º ${i + 1} → se reemplaza por</p><div class="chips" role="radiogroup" aria-labelledby="pm-l${i}">` +
+      PM_M.map(m => radio('pm-s' + i, `pm-s${i}-${m.s}`, m.s, m.s === v, `<span>${m.s}<sup>+</sup></span><small>${m.n}</small>`, 'chip-m')).join('') +
+      '</div></div>').join('');
+  }
+
+  function buildPM() {
+    $('#pm-a').innerHTML = PM_A.map(a => radio('pm-a', 'pm-a-' + a.id, a.id, a.id === pm.a, `<span>${fmt(a.id)}</span><small>${a.h} H</small>`, 'chip-a')).join('');
+    pmSlots();
+    $('#pm-a').addEventListener('change', e => { pm.a = e.target.value; pmSlots(); renderPM(); });
+    $('#pm-slots').addEventListener('change', e => { pm.slots[+e.target.name.slice(4)] = e.target.value; renderPM(); });
+  }
+
+  function renderPM() {
+    const A = PM_A.find(x => x.id === pm.a);
+    const counts = {};
+    pm.slots.forEach(s => { counts[s] = (counts[s] || 0) + 1; });
+    const kinds = Object.keys(counts).sort();
+    const cls = s => MCLS[kinds.indexOf(s)];
+    const nm = s => PM_M.find(m => m.s === s).n;
+    const row = pm.slots.map(s => `<span class="hb metal ${cls(s)}"><b>${s}</b><small>en lugar de H</small></span>`).join('') +
+      `<span class="mol-core a">${fmt(A.A)}</span>`;
+    $('#pm-mol').innerHTML = `<p class="mol-k">Así queda la molécula de ${fmt(A.id)}</p><div class="mol-row">${row}</div>`;
+
+    const salt = kinds.map(s => `{${cls(s)}|${s}${co(counts[s])}}`).join('') + `{a|${A.A}}`;
+    const type = kinds.length > 1 ? 'mixta' : 'neutra';
+    const pre = ['', '', 'di', 'tri'];
+    const parts = kinds.map(s => (kinds.length > 1 ? pre[counts[s]] : '') + nm(s));
+    const list = parts.length === 1 ? parts[0] : parts.slice(0, -1).join(', ') + ' y ' + parts[parts.length - 1];
+    const name = `${A.n} de ${list}`;
+    const alt = kinds.length === 2 ? `También: ${A.n} doble de ${list}.` : '';
+    const eq = kinds.map(s => `${co(counts[s])}{${cls(s)}|${s}}{x|OH}`).join(' + ') +
+      ` + {x|H${co(A.h)}}{a|${A.A}} → ${salt} + ${co(A.h)}{x|H2O}`;
+    const charges = pm.slots.map(() => '+1').join(' ') + ` −${A.h} = 0`;
+    const cap = type === 'mixta'
+      ? 'Cada H del ácido lo reemplazó un metal, y no todos son el mismo. Por eso es una sal mixta.'
+      : 'Todos los H los reemplazó el mismo metal: es una sal neutra común. Cambiá uno de los metales para que sea mixta.';
+    $('#pm-out').innerHTML =
+      `<div class="result-top"><p class="cform">${fmt(salt)}</p>${pill(type)}</div><p>${cap}</p>` +
+      `<dl class="facts"><dt>Nombre</dt><dd><b>${name}</b>${alt ? `<span class="note" style="color:var(--ink-2)">${alt}</span>` : ''}</dd>` +
+      `<dt>Cargas</dt><dd>${charges}</dd>` +
+      `<dt>Reacción</dt><dd><span class="feq">${fmt(eq)}</span></dd></dl>`;
+  }
+
+  /* ================= EJERCICIOS ================= */
+  const CL = ['Neutra', 'Ácida', 'Básica', 'Mixta'];
+  const EX = [
+    // Clasificar (ok = índice en CL)
+    { s: 'clasificar', p: 'NaHCO3', ok: 1, pc: '{m|Na}{hh|H}{a|CO3}', why: 'Hay un H adentro del anión (HCO3^-). Sobró un H del ácido carbónico: es el bicarbonato de sodio.' },
+    { s: 'clasificar', p: 'Mg(OH)Cl', ok: 2, pc: '{m|Mg}{ho|(OH)}{a|Cl}', why: 'Quedó un OH de la base entre el metal y el anión.' },
+    { s: 'clasificar', p: 'KNaSO4', ok: 3, pc: '{m|K}{mm|Na}{a|SO4}', why: 'Dos metales distintos y ningún H ni OH. Los dos H del ácido sulfúrico se reemplazaron con metales diferentes.' },
+    { s: 'clasificar', p: 'CaCO3', ok: 0, pc: '{m|Ca}{a|CO3}', why: 'Un solo metal y ningún H ni OH: neutralización completa.' },
+    { s: 'clasificar', p: 'NaH2PO4', ok: 1, pc: '{m|Na}{hh|H2}{a|PO4}', why: 'Quedan 2 de los 3 H del ácido fosfórico.' },
+    { s: 'clasificar', p: 'Al(OH)2NO3', ok: 2, pc: '{m|Al}{ho|(OH)2}{a|NO3}', why: 'Quedan 2 de los 3 OH del hidróxido de aluminio.' },
+    { s: 'clasificar', p: 'LiNaCO3', ok: 3, pc: '{m|Li}{mm|Na}{a|CO3}', why: 'Litio y sodio en la misma sal, sin H ni OH.' },
+    { s: 'clasificar', p: 'Ca(HSO4)2', ok: 1, pc: '{m|Ca}{a|(}{hh|H}{a|SO4)2}', why: 'Cada anión HSO4^- conserva un H. El 2 de afuera es por el calcio (2+) y no cambia el tipo.' },
+    { s: 'clasificar', p: 'Fe(OH)SO4', ok: 2, pc: '{m|Fe}{ho|(OH)}{a|SO4}', why: 'Quedó un OH del hidróxido de hierro (III). Cargas: +3 −1 −2 = 0.' },
+    { s: 'clasificar', p: 'KAl(SO4)2', ok: 3, pc: '{m|K}{mm|Al}{a|(SO4)2}', why: 'Potasio y aluminio en la misma sal: es el alumbre.' },
+    { s: 'clasificar', p: 'K2SO4', ok: 0, pc: '{m|K2}{a|SO4}', why: 'Aunque haya dos K, es un solo tipo de metal. Sin H ni OH: neutra.' },
+    { s: 'clasificar', p: 'Na2HPO4', ok: 1, pc: '{m|Na2}{hh|H}{a|PO4}', why: 'Aunque tenga dos sodios, queda un H del ácido. Lo que manda es el H que sobra.' },
+    { s: 'clasificar', p: 'KHS', ok: 1, pc: '{m|K}{hh|H}{a|S}', why: 'El H quedó pegado al azufre (HS^-): sobró un H del ácido sulfhídrico.' },
+    // Reacciones (la primera opción es la correcta; se mezclan al mostrar)
+    { s: 'reacciones', p: 'NaOH + H2SO4 →', opts: ['NaHSO4 + H2O', 'Na2SO4 + H2O', 'NaSO4 + H2O'], pc: '{m|Na}{x|OH} + {x|H}{hh|H}{a|SO4} → {m|Na}{hh|H}{a|SO4} + {x|H2O}', why: 'Hay un solo OH^- para dos H^+. Se neutraliza uno y el otro queda en la sal: sal ácida.' },
+    { s: 'reacciones', p: '2NaOH + H2SO4 →', opts: ['Na2SO4 + 2H2O', 'NaHSO4 + H2O', 'Na2SO4 + H2'], pc: '2{m|Na}{x|OH} + {x|H2}{a|SO4} → {m|Na2}{a|SO4} + 2{x|H2O}', why: 'Dos OH^- para dos H^+: neutralización completa, sal neutra.' },
+    { s: 'reacciones', p: 'Mg(OH)2 + HCl →', opts: ['Mg(OH)Cl + H2O', 'MgCl2 + H2O', 'MgCl + H2O'], pc: '{m|Mg}{ho|(OH)}{x|(OH)} + {x|H}{a|Cl} → {m|Mg}{ho|(OH)}{a|Cl} + {x|H2O}', why: 'El ácido trae un solo H^+, así que solo se va un OH^-. El otro queda: sal básica.' },
+    { s: 'reacciones', p: 'Mg(OH)2 + 2HCl →', opts: ['MgCl2 + 2H2O', 'Mg(OH)Cl + H2O', 'Mg(OH)2Cl2'], pc: '{m|Mg}{x|(OH)2} + 2{x|H}{a|Cl} → {m|Mg}{a|Cl2} + 2{x|H2O}', why: 'Dos H^+ neutralizan los dos OH^-: sal neutra.' },
+    { s: 'reacciones', p: 'NaOH + KOH + H2SO4 →', opts: ['KNaSO4 + 2H2O', 'Na2SO4 + K2SO4', 'KNa(SO4)2 + H2O'], pc: '{mm|Na}{x|OH} + {m|K}{x|OH} + {x|H2}{a|SO4} → {m|K}{mm|Na}{a|SO4} + 2{x|H2O}', why: 'Cada metal reemplaza un H del ácido: sal mixta.' },
+    { s: 'reacciones', p: 'NaOH + H3PO4 →', opts: ['NaH2PO4 + H2O', 'Na2HPO4 + 2H2O', 'Na3PO4 + 3H2O'], pc: '{m|Na}{x|OH} + {x|H}{hh|H2}{a|PO4} → {m|Na}{hh|H2}{a|PO4} + {x|H2O}', why: 'Un solo OH^- saca un solo H. Quedan dos H en el anión (H2PO4^-).' },
+    { s: 'reacciones', p: 'Al(OH)3 + 2HNO3 →', opts: ['Al(OH)(NO3)2 + 2H2O', 'Al(NO3)3 + 3H2O', 'Al(OH)2NO3 + H2O'], pc: '{m|Al}{ho|(OH)}{x|(OH)2} + 2{x|H}{a|NO3} → {m|Al}{ho|(OH)}{a|(NO3)2} + 2{x|H2O}', why: 'Dos H^+ sacan dos OH^-. Queda uno: sal básica.' },
+    { s: 'reacciones', p: 'Ca(OH)2 + 2H2CO3 →', opts: ['Ca(HCO3)2 + 2H2O', 'CaHCO3 + 2H2O', 'Ca(CO3)2 + 2H2O'], pc: '{m|Ca}{x|(OH)2} + 2{x|H}{hh|H}{a|CO3} → {m|Ca}{a|(}{hh|H}{a|CO3)2} + 2{x|H2O}', why: 'Cada ácido pierde un solo H, así que queda HCO3^-. El calcio (2+) necesita dos.' },
+    { s: 'reacciones', p: 'KOH + Al(OH)3 + 2H2SO4 →', opts: ['KAl(SO4)2 + 4H2O', 'KAlSO4 + 4H2O', 'K2SO4 + Al2(SO4)3'], pc: '{m|K}{x|OH} + {mm|Al}{x|(OH)3} + 2{x|H2}{a|SO4} → {m|K}{mm|Al}{a|(SO4)2} + 4{x|H2O}', why: 'Potasio (1+) y aluminio (3+) suman 4+, y dos sulfatos suman 4−. Es el alumbre, una sal mixta.' },
+    // Nombres y fórmulas
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'bicarbonato de sodio (hidrogenocarbonato de sodio)', opts: ['NaHCO3', 'Na2CO3', 'Na(HCO3)2', 'NaH2CO3'], pc: '{m|Na}{hh|H}{a|CO3}', why: 'HCO3^- tiene carga 1−, igual que el Na^+: van uno a uno.' },
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'cloruro básico de magnesio (hidroxicloruro de magnesio)', opts: ['Mg(OH)Cl', 'MgCl2', 'Mg(OH)2Cl', 'MgHCl'], pc: '{m|Mg}{ho|(OH)}{a|Cl}', why: 'Básico significa que queda un OH. Cargas: +2 (Mg) −1 (OH) −1 (Cl) = 0.' },
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'sulfato de potasio y sodio', opts: ['KNaSO4', 'K2Na2SO4', 'KNa(SO4)2', 'K2SO4'], pc: '{m|K}{mm|Na}{a|SO4}', why: 'Cargas: +1 (K) +1 (Na) −2 (SO4) = 0.' },
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'dihidrogenofosfato de calcio (fosfato diácido de calcio)', opts: ['Ca(H2PO4)2', 'CaH2PO4', 'CaHPO4', 'Ca3(PO4)2'], pc: '{m|Ca}{a|(}{hh|H2}{a|PO4)2}', why: 'El anión H2PO4^- tiene carga 1−. El calcio es 2+, así que van dos aniones.' },
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'nitrato básico de calcio (hidroxinitrato de calcio)', opts: ['Ca(OH)NO3', 'Ca(NO3)2', 'Ca(OH)2NO3', 'CaHNO3'], pc: '{m|Ca}{ho|(OH)}{a|NO3}', why: 'Cargas: +2 (Ca) −1 (OH) −1 (NO3) = 0.' },
+    { s: 'nombres', q: '¿Cuál es la fórmula?', pn: true, p: 'sulfato ácido de potasio (hidrogenosulfato de potasio)', opts: ['KHSO4', 'K2SO4', 'K(HSO4)2', 'KH2SO4'], pc: '{m|K}{hh|H}{a|SO4}', why: 'HSO4^- tiene carga 1−, igual que el K^+.' },
+    { s: 'nombres', q: '¿Cómo se llama?', p: 'Na2HPO4', opts: ['hidrogenofosfato de sodio', 'dihidrogenofosfato de sodio', 'fosfato de sodio', 'fosfato básico de sodio'], pc: '{m|Na2}{hh|H}{a|PO4}', why: 'Queda un solo H en el anión: hidrogeno-. En la tradicional es fosfato monoácido de sodio.' },
+    { s: 'nombres', q: '¿Cómo se llama?', p: 'Al(OH)2Cl', opts: ['dihidroxicloruro de aluminio', 'hidroxicloruro de aluminio', 'cloruro ácido de aluminio', 'cloruro de aluminio'], pc: '{m|Al}{ho|(OH)2}{a|Cl}', why: 'Quedan dos OH: dihidroxi-. En la tradicional es cloruro dibásico de aluminio.' },
+    { s: 'nombres', q: '¿Cómo se llama?', p: 'CaNaPO4', opts: ['fosfato de calcio y sodio', 'fosfato ácido de calcio', 'fosfato de sodio', 'fosfato básico de calcio y sodio'], pc: '{m|Ca}{mm|Na}{a|PO4}', why: 'Dos metales y ningún H ni OH: sal mixta. Se nombran los dos metales unidos con y.' }
+  ];
+  const SETS = [['todo', 'Todo mezclado'], ['clasificar', 'Clasificar'], ['reacciones', 'Reacciones'], ['nombres', 'Nombres y fórmulas']];
+  const SETQ = { clasificar: '¿Qué tipo de sal es?', reacciones: '¿Qué se forma?' };
+  const KIND = { clasificar: 'Clasificar', reacciones: 'Reacciones', nombres: 'Nombres' };
+  let ex;
+
+  function buildEx() {
+    $('#ex-tabs').innerHTML = SETS.map(([v, l]) => radio('ex-set', 'ex-set-' + v, v, v === 'todo', l, 'chip-t')).join('');
+    $('#ex-tabs').addEventListener('change', e => exStart(e.target.value, false));
+  }
+
+  function exStart(set, focus) {
+    const pool = set === 'todo' ? EX : EX.filter(e => e.s === set);
+    ex = { set, list: shuffle(pool).slice(0, set === 'todo' ? 12 : 10), i: 0, score: 0 };
+    exRender(focus);
+  }
+
+  function exRender(focus) {
+    const box = $('#exq'), N = ex.list.length;
+    if (ex.i >= N) {
+      const r = ex.score / N;
+      const msg = r >= 0.9 ? 'Muy bien. Ya distinguís los cuatro tipos.'
+        : r >= 0.6 ? 'Vas bien. Repasá en el resumen las que te costaron y hacé otra tanda.'
+        : 'Volvé a mirar qué queda en cada fórmula (H, OH o dos metales) y probá otra tanda.';
+      box.innerHTML = `<div class="qtop"><span>Resultado</span><span>${N} preguntas</span></div>` +
+        `<div class="qprog" aria-hidden="true"><span style="width:100%"></span></div>` +
+        `<p class="qend" id="exp" tabindex="-1">${ex.score} / ${N}</p><p>${msg}</p>` +
+        `<button type="button" class="btn" id="exa">Otra tanda</button>`;
+      $('#exa').addEventListener('click', () => exStart(ex.set, true));
+      if (focus) $('#exp').focus();
+      return;
+    }
+    const e = ex.list[ex.i];
+    const okIdx = e.s === 'clasificar' ? e.ok : 0;
+    const opts = e.s === 'clasificar' ? CL.map((t, i) => ({ t, i })) : shuffle(e.opts.map((t, i) => ({ t, i })));
+    box.innerHTML =
+      `<div class="qtop"><span>${KIND[e.s]} · ${ex.i + 1} de ${N}</span><span>Aciertos: <b id="exs">${ex.score}</b></span></div>` +
+      `<div class="qprog" aria-hidden="true"><span style="width:${ex.i / N * 100}%"></span></div>` +
+      `<p class="qlabel">${e.q || SETQ[e.s]}</p>` +
+      `<p class="${e.pn ? 'qname' : 'qreact'}" id="exp" tabindex="-1">${fmt(e.p)}</p>` +
+      `<div class="opts" id="exo">${opts.map(o => `<button type="button" class="opt" data-i="${o.i}">${fmt(o.t)}</button>`).join('')}</div>` +
+      `<div class="qreveal" id="exr" aria-live="polite"></div>`;
+    $('#exo').addEventListener('click', ev => {
+      const b = ev.target.closest('.opt'); if (!b || b.disabled) return;
+      const ok = +b.dataset.i === okIdx;
+      $('#exo').querySelectorAll('.opt').forEach(o => { o.disabled = true; if (+o.dataset.i === okIdx) o.classList.add('ok'); });
+      if (ok) { ex.score++; $('#exs').textContent = ex.score; } else b.classList.add('bad');
+      const right = e.s === 'clasificar' ? `No, es una sal ${CL[okIdx].toLowerCase()}.` : `No. La correcta es ${fmt(e.opts[0])}.`;
+      $('#exr').innerHTML = `<p class="qmini ${ok ? 'good' : 'bad'}">${ok ? '¡Bien!' : right}</p>` +
+        (e.pc ? `<p class="qreact sm">${fmt(e.pc)}</p>` : '') +
+        `<p>${fmt(e.why)}</p><button type="button" class="btn" id="exn">${ex.i === N - 1 ? 'Ver resultado' : 'Siguiente'}</button>`;
+      $('#exn').addEventListener('click', () => { ex.i++; exRender(true); });
+    });
+    if (focus) $('#exp').focus();
+  }
+
+  /* ================= Inicio ================= */
   buildMatrix();
   select('hidroxido|oxoacido', false);
-  buildBuilder();
-  renderBuilder();
+  buildBuilder(); renderBuilder();
   startQuiz(false);
+  buildPA(); renderPA();
+  buildPB(); renderPB();
+  buildPM(); renderPM();
+  buildEx(); exStart('todo', false);
 })();
 </script>
