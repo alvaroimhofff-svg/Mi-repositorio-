@@ -309,6 +309,36 @@ legend{font-family:var(--f-mono);font-size:.74rem;text-transform:uppercase;lette
 .btn:hover{opacity:.9}
 .qend{font-family:var(--f-display);font-size:clamp(3rem,12vw,4.5rem);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 
+/* Completar la reacción según el tipo */
+.cr-ask{font-family:var(--f-display);font-weight:700;font-size:clamp(1.25rem,4vw,1.6rem);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.cr-ask:focus{outline:none}
+.pill.big{font-family:var(--f-display);font-size:1.05rem;font-weight:700;padding:.3rem .85rem}
+.cr-multi{font-size:.9rem;color:var(--ink-2)}
+.cr-eq{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem .5rem;font-size:clamp(1.3rem,4.5vw,1.7rem);font-weight:700}
+.cr-term{display:inline-flex;align-items:center;gap:.25rem}
+.cr-op{color:var(--ink-2);font-weight:500}
+.cr-co,.cr-salt{font:inherit;font-size:max(16px,.85em);font-weight:700;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:.15em .3em}
+.cr-co{width:2.3em;text-align:center}
+.cr-salt{width:8em}
+.cr-co:focus,.cr-salt:focus{border-color:var(--focus);outline:none;box-shadow:0 0 0 3px var(--base-soft)}
+.cr-co::placeholder,.cr-salt::placeholder{color:var(--ink-2);opacity:.55;font-weight:400}
+.cr-read{font-size:.95rem;color:var(--ink-2);min-height:1.6em}
+.cr-read b{color:var(--ink);font-size:1.15rem}
+.cr-btns{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink-2);opacity:1}
+.cr-fb{display:grid;gap:.6rem}
+.cr-fb:empty{display:none}
+.fb-box{border-radius:10px;padding:.85rem 1rem;display:grid;gap:.5rem}
+.fb-t{font-weight:700}
+.fb-ok{background:var(--neutral-soft)} .fb-ok .fb-t{color:var(--neutral)}
+.fb-bad{background:var(--acid-soft)} .fb-bad .fb-t{color:var(--acid)}
+.fb-hint{background:var(--gas-soft)} .fb-hint .fb-t{color:var(--gas)}
+.fb-ans{background:var(--surface-2)}
+.fb-box .big-eq{font-size:clamp(1.15rem,4vw,1.5rem)}
+.diff{margin:0;padding-left:1.1rem;display:grid;gap:.15rem}
+.hw-q .pill{vertical-align:middle;margin-left:.2rem}
+
 /* Correcciones y ejercicios en papel */
 .fixes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:1rem}
 .fix{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.1rem 1.2rem;display:grid;gap:.6rem;align-content:start}
@@ -727,7 +757,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       <div class="part-txt">
         <p class="part-k">Para cerrar</p>
         <h2>Ejercicios</h2>
-        <p>Un resumen de las cuatro sales, práctica con corrección automática y ejercicios para resolver en la carpeta.</p>
+        <p>Un resumen de las cuatro sales, reacciones para completar según el tipo, práctica con corrección automática y ejercicios para la carpeta.</p>
       </div>
     </header>
 
@@ -749,6 +779,31 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       </div>
     </section>
 
+    <section class="sec" aria-labelledby="ec" id="completar">
+      <div class="sec-head">
+        <p class="eyebrow">Completar la reacción</p>
+        <h3 class="sec-title" id="ec">Te digo el tipo, vos armás la reacción</h3>
+        <p>Cada ejercicio te da los reactivos y el tipo de sal que tenés que formar. Escribí la fórmula de la sal y poné los coeficientes para balancear. Si un coeficiente es 1, dejalo vacío. Los ejercicios se generan solos, así que podés hacer todos los que quieras.</p>
+      </div>
+      <fieldset><legend>Tipo de sal a formar</legend><div class="chips" id="cr-tabs"></div></fieldset>
+      <form class="quiz" id="cr" novalidate autocomplete="off">
+        <div class="qtop"><span id="cr-n">Ejercicio 1</span><span id="cr-stats"></span></div>
+        <div class="qpart">
+          <p class="cr-ask" id="cr-ask" tabindex="-1"></p>
+          <p class="cr-multi" id="cr-multi" hidden>Hay más de una respuesta correcta; con una alcanza.</p>
+        </div>
+        <div class="cr-eq" id="cr-eq"></div>
+        <p class="cr-read" id="cr-read"></p>
+        <div class="cr-btns">
+          <button type="submit" class="btn">Comprobar</button>
+          <button type="button" class="btn ghost" id="cr-hint">Pista</button>
+          <button type="button" class="btn ghost" id="cr-show">Ver respuesta</button>
+          <button type="button" class="btn ghost" id="cr-next">Otro ejercicio</button>
+        </div>
+        <div class="cr-fb" id="cr-fb" aria-live="polite"></div>
+      </form>
+    </section>
+
     <section class="sec" aria-labelledby="e2">
       <div class="sec-head">
         <p class="eyebrow">Práctica con corrección</p>
@@ -767,7 +822,28 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
       </div>
       <div class="hw">
         <div class="hw-group">
-          <h4>A · Completá la reacción, nombrá la sal y decí de qué tipo es</h4>
+          <h4>A · Formá el tipo de sal que se pide</h4>
+          <ol class="hw-list">
+            <li><p class="hw-q"><span data-f="NaOH + H2SO4 →"></span> <span class="pill t-acida">sal ácida</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Na}{x|OH} + {x|H2}{a|SO4} → {m|Na}{hh|H}{a|SO4} + {x|H2O}"></p><p>Hidrogenosulfato de sodio (sulfato ácido de sodio). Un solo OH saca un solo H; el otro queda en el anión.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="NaOH + H2SO4 →"></span> <span class="pill t-neutra">sal neutra</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="2{m|Na}{x|OH} + {x|H2}{a|SO4} → {m|Na2}{a|SO4} + 2{x|H2O}"></p><p>Sulfato de sodio. Hacen falta dos NaOH para sacar los dos H. Mismos reactivos que el anterior: cambia la cantidad.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="Ca(OH)2 + HNO3 →"></span> <span class="pill t-basica">sal básica</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{x|(OH)2} + {x|H}{a|NO3} → {m|Ca}{ho|(OH)}{a|NO3} + {x|H2O}"></p><p>Hidroxinitrato de calcio (nitrato básico de calcio). Un solo HNO<sub>3</sub> saca un solo OH; el otro queda pegado al calcio.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="Ca(OH)2 + HNO3 →"></span> <span class="pill t-neutra">sal neutra</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{x|(OH)2} + 2{x|H}{a|NO3} → {m|Ca}{a|(NO3)2} + 2{x|H2O}"></p><p>Nitrato de calcio. Hacen falta dos HNO<sub>3</sub> para sacar los dos OH.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="KOH + H3PO4 →"></span> <span class="pill t-acida">sal ácida</span></p><p class="hw-hint">Tiene dos respuestas posibles.</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{x|OH} + {x|H3}{a|PO4} → {m|K}{hh|H2}{a|PO4} + {x|H2O}"></p><p>Dihidrogenofosfato de potasio: se va 1 H y quedan 2.</p><p class="feq" data-f="2{m|K}{x|OH} + {x|H3}{a|PO4} → {m|K2}{hh|H}{a|PO4} + 2{x|H2O}"></p><p>Hidrogenofosfato de potasio: se van 2 H y queda 1. Las dos son sales ácidas.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="KOH + LiOH + H2SO4 →"></span> <span class="pill t-mixta">sal mixta</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{x|OH} + {mm|Li}{x|OH} + {x|H2}{a|SO4} → {m|K}{mm|Li}{a|SO4} + 2{x|H2O}"></p><p>Sulfato de potasio y litio. Cada H del ácido lo reemplaza un metal distinto. Cargas: +1 +1 −2 = 0.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="Al(OH)3 + HCl →"></span> <span class="pill t-basica">sal básica</span></p><p class="hw-hint">Tiene dos respuestas posibles.</p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Al}{x|(OH)3} + {x|H}{a|Cl} → {m|Al}{ho|(OH)2}{a|Cl} + {x|H2O}"></p><p>Dihidroxicloruro de aluminio: se va 1 OH y quedan 2.</p><p class="feq" data-f="{m|Al}{x|(OH)3} + 2{x|H}{a|Cl} → {m|Al}{ho|(OH)}{a|Cl2} + 2{x|H2O}"></p><p>Hidroxicloruro de aluminio: se van 2 OH y queda 1. Las dos son sales básicas.</p></div></details></li>
+            <li><p class="hw-q"><span data-f="Mg(OH)2 + H2CO3 →"></span> <span class="pill t-acida">sal ácida</span></p>
+              <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Mg}{x|(OH)2} + 2{x|H2}{a|CO3} → {m|Mg}{a|(}{hh|H}{a|CO3)2} + 2{x|H2O}"></p><p>Hidrogenocarbonato de magnesio (bicarbonato de magnesio). Cada ácido pierde un solo H y queda HCO<sub>3</sub><sup>−</sup>; el magnesio (2+) necesita dos.</p></div></details></li>
+          </ol>
+        </div>
+        <div class="hw-group">
+          <h4>B · Completá la reacción, nombrá la sal y decí de qué tipo es</h4>
           <ol class="hw-list">
             <li><p class="hw-q" data-f="KOH + H2SO4 → ?"></p><p class="hw-hint">Una molécula de cada uno.</p>
               <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|K}{x|OH} + {x|H}{hh|H}{a|SO4} → {m|K}{hh|H}{a|SO4} + {x|H2O}"></p><p>Hidrogenosulfato de potasio (sulfato ácido de potasio). <b>Ácida</b>: un solo OH saca un solo H.</p></div></details></li>
@@ -784,7 +860,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
           </ol>
         </div>
         <div class="hw-group">
-          <h4>B · Escribí la fórmula</h4>
+          <h4>C · Escribí la fórmula</h4>
           <ol class="hw-list">
             <li><p class="hw-q">hidrogenocarbonato de calcio</p>
               <details><summary>Ver respuesta</summary><div class="ans"><p class="feq" data-f="{m|Ca}{a|(}{hh|H}{a|CO3)2}"></p><p>HCO₃<sup>−</sup> tiene carga 1− y el calcio 2+, así que van dos aniones. Es la sal que endurece el agua.</p></div></details></li>
@@ -799,7 +875,7 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
           </ol>
         </div>
         <div class="hw-group">
-          <h4>C · Nombrá y clasificá</h4>
+          <h4>D · Nombrá y clasificá</h4>
           <ol class="hw-list">
             <li><p class="hw-q" data-f="NaHSO4"></p>
               <details><summary>Ver respuesta</summary><div class="ans"><p>Hidrogenosulfato de sodio (sulfato ácido de sodio o bisulfato de sodio). <b>Ácida</b>.</p></div></details></li>
@@ -1452,6 +1528,279 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
     if (focus) $('#exp').focus();
   }
 
+  /* ================= EJERCICIOS: completar la reacción según el tipo ================= */
+  const GM = {
+    Li: { s: 'Li', q: 1, n: 'litio' }, Na: { s: 'Na', q: 1, n: 'sodio' }, K: { s: 'K', q: 1, n: 'potasio' },
+    Ca: { s: 'Ca', q: 2, n: 'calcio' }, Mg: { s: 'Mg', q: 2, n: 'magnesio' }, Zn: { s: 'Zn', q: 2, n: 'zinc' },
+    Al: { s: 'Al', q: 3, n: 'aluminio' }, Fe: { s: 'Fe', q: 3, n: 'hierro (III)' }
+  };
+  const GA = {
+    Cl: { s: 'Cl', h: 1, poly: false, n: 'cloruro' }, NO3: { s: 'NO3', h: 1, poly: true, n: 'nitrato' },
+    S: { s: 'S', h: 2, poly: false, n: 'sulfuro' }, CO3: { s: 'CO3', h: 2, poly: true, n: 'carbonato' },
+    SO4: { s: 'SO4', h: 2, poly: true, n: 'sulfato' }, PO4: { s: 'PO4', h: 3, poly: true, n: 'fosfato' }
+  };
+  const pickOne = arr => arr[Math.floor(Math.random() * arr.length)];
+  const hydMk = (M, c) => M.q > 1 ? `{${c}|${M.s}}{x|(OH)${M.q}}` : `{${c}|${M.s}}{x|OH}`;
+  const acF = A => `H${co(A.h)}${A.s}`;
+  const acMk = A => `{x|H${co(A.h)}}{a|${A.s}}`;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* Lee una fórmula y cuenta los átomos de cada elemento. */
+  const KNOWN = new Set(['H', 'O', 'Li', 'Na', 'K', 'Ca', 'Mg', 'Zn', 'Al', 'Fe', 'Cl', 'N', 'S', 'C', 'P']);
+  function parseF(str) {
+    const s = str.replace(/\[/g, '(').replace(/\]/g, ')');
+    let i = 0;
+    const stack = [{}];
+    const num = () => { const m = /^\d+/.exec(s.slice(i)); if (m) { i += m[0].length; return +m[0]; } return 1; };
+    while (i < s.length) {
+      const ch = s[i];
+      if (ch === '(') { stack.push({}); i++; }
+      else if (ch === ')') {
+        i++;
+        if (stack.length < 2) return { err: 'paren' };
+        const n = num(), top = stack.pop(), t = stack[stack.length - 1];
+        for (const k in top) t[k] = (t[k] || 0) + top[k] * n;
+      } else if (/[A-Z]/.test(ch)) {
+        const el = /^[A-Z][a-z]?/.exec(s.slice(i))[0];
+        if (!KNOWN.has(el)) return { err: 'el', el };
+        i += el.length;
+        const n = num(), t = stack[stack.length - 1];
+        t[el] = (t[el] || 0) + n;
+      } else return { err: 'char', ch };
+    }
+    if (stack.length !== 1) return { err: 'paren' };
+    if (!Object.keys(stack[0]).length) return { err: 'empty' };
+    return { counts: stack[0] };
+  }
+  const compKey = f => { const r = parseF(f); return r.counts ? Object.keys(r.counts).sort().map(k => k + r.counts[k]).join('') : '?'; };
+  const EL_ORDER = ['Li', 'Na', 'K', 'Ca', 'Mg', 'Zn', 'Al', 'Fe', 'Cl', 'N', 'S', 'C', 'P', 'H', 'O'];
+  const addC = (T, counts, n) => { for (const k in counts) T[k] = (T[k] || 0) + counts[k] * n; };
+
+  /* Candidatos de sal (fórmula, colores, nombre, coeficientes) */
+  function candAcid(M, A, r) {
+    const k = A.h - r, poly = k > 0 || A.poly;
+    const an = (k > 0 ? 'H' + co(k) : '') + A.s;
+    const anMk = k > 0 ? `{hh|H${co(k)}}{a|${A.s}}` : `{a|${A.s}}`;
+    const g = gcd(M.q, r), nM = r / g, nA = M.q / g;
+    const f = M.s + co(nM) + (nA > 1 ? (poly ? `(${an})${nA}` : an + nA) : an);
+    const mk = `{m|${M.s}${co(nM)}}` + (nA > 1 ? (poly ? `(${anMk})${nA}` : `{a|${A.s}${nA}}`) : anMk);
+    const name = (k > 0 ? ['', 'hidrogeno', 'dihidrogeno'][k] : '') + `${A.n} de ${M.n}`;
+    const trad = k === 0 ? '' : (A.h === 2 ? `${A.n} ácido de ${M.n}` : `${A.n} ${k === 1 ? 'monoácido' : 'diácido'} de ${M.n}`);
+    const why = k > 0
+      ? `Cada ${acF(A)} pierde ${r} de sus ${A.h} H. ${k === 1 ? 'El H que queda sigue' : 'Los ' + k + ' H que quedan siguen'} en el anión (${an}^${co(r)}-).`
+      : 'Todos los H del ácido y todos los OH de la base se van como agua. En la sal no queda ninguno.';
+    return { f, mk, type: k > 0 ? 'acida' : 'neutra', name, trad, coefs: { [hydF(M)]: nM, [acF(A)]: nA }, w: nM * M.q, why, alt: [] };
+  }
+  function candBasic(M, A, r) {
+    const k = M.q - r, a = A.h, g = gcd(r, a), nU = a / g, nA = r / g;
+    if (k > 0 && nU > 1) return null;
+    const catF = k > 0 ? `${M.s}(OH)${co(k)}` : M.s + co(nU);
+    const catMk = k > 0 ? `{m|${M.s}}{ho|(OH)${co(k)}}` : `{m|${M.s}${co(nU)}}`;
+    const anF = nA > 1 ? (A.poly ? `(${A.s})${nA}` : A.s + nA) : A.s;
+    const anMk = nA > 1 ? (A.poly ? `({a|${A.s}})${nA}` : `{a|${A.s}${nA}}`) : `{a|${A.s}}`;
+    const name = (k > 0 ? ['', 'hidroxi', 'dihidroxi'][k] : '') + `${A.n} de ${M.n}`;
+    const trad = k > 0 ? `${A.n} ${k === 1 ? 'básico' : 'dibásico'} de ${M.n}` : '';
+    const why = k > 0
+      ? `Cada ${hydF(M)} pierde ${r} de sus ${M.q} OH. ${k === 1 ? 'El OH que queda sigue pegado' : 'Los ' + k + ' OH que quedan siguen pegados'} al metal, que queda como ${catF}^${co(r)}+.`
+      : 'Todos los OH de la base y todos los H del ácido se van como agua. En la sal no queda ninguno.';
+    const alt = k === 1 ? [catF.replace('(OH)', 'OH') + anF] : [];
+    return { f: catF + anF, mk: catMk + anMk, type: k > 0 ? 'basica' : 'neutra', name, trad, coefs: { [hydF(M)]: nU, [acF(A)]: nA }, w: nU * r, why, alt };
+  }
+  function candMix(list, A, c) {
+    const cls = ['m', 'mm'];
+    const anF = c > 1 ? (A.poly ? `(${A.s})${c}` : A.s + c) : A.s;
+    const anMk = c > 1 ? (A.poly ? `({a|${A.s}})${c}` : `{a|${A.s}${c}}`) : `{a|${A.s}}`;
+    const f = list.map(x => x.M.s + co(x.n)).join('') + anF;
+    const mk = list.map((x, i) => `{${cls[i]}|${x.M.s}${co(x.n)}}`).join('') + anMk;
+    const alt = [list.slice().reverse().map(x => x.M.s + co(x.n)).join('') + anF];
+    const name = `${A.n} de ` + list.map(x => (x.n > 1 ? ['', '', 'di', 'tri'][x.n] : '') + x.M.n).join(' y ');
+    const coefs = {};
+    list.forEach(x => { coefs[hydF(x.M)] = x.n; });
+    coefs[acF(A)] = c;
+    const charges = list.map(x => Array(x.n).fill('+' + x.M.q).join(' ')).join(' ') + ` −${c * A.h}`;
+    return { f, mk, type: 'mixta', name, trad: '', coefs, w: c * A.h, alt,
+      why: `Cada H del ácido lo reemplaza un metal, y hay dos metales distintos. Cargas: ${charges} = 0.` };
+  }
+
+  /* Generadores: uno por tipo */
+  function makeEx(type, metals, A, valid) {
+    const clsOf = {};
+    metals.forEach((M, i) => { clsOf[M.s] = ['m', 'mm'][i]; });
+    const reactants = metals.map(M => ({ f: hydF(M), mk: hydMk(M, clsOf[M.s]), ions: [`${M.s}^${co(M.q)}+`, 'OH^-'] }))
+      .concat([{ f: acF(A), mk: acMk(A), ions: ['H^+', `${A.s}^${co(A.h)}-`] }]);
+    if (Math.random() < 0.35) reactants.unshift(reactants.pop());
+    const others = [];
+    metals.forEach(M => {
+      for (let r = 1; r <= A.h; r++) others.push(candAcid(M, A, r));
+      for (let r = 1; r < M.q; r++) { const c = candBasic(M, A, r); if (c) others.push(c); }
+    });
+    const vKeys = new Set(valid.map(c => compKey(c.f)));
+    return { type, reactants, valid, others: others.filter(c => !vKeys.has(compKey(c.f))), key: type + reactants.map(r => r.f).join('+') };
+  }
+  const GEN = {
+    neutra() {
+      let M, A;
+      do { M = GM[pickOne(Object.keys(GM))]; A = GA[pickOne(Object.keys(GA))]; } while (M.q === 3 && (A.s === 'CO3' || A.s === 'S'));
+      return makeEx('neutra', [M], A, [candAcid(M, A, A.h)]);
+    },
+    acida() {
+      const M = GM[pickOne(['Li', 'Na', 'K', 'Ca', 'Mg'])], A = GA[pickOne(['S', 'CO3', 'SO4', 'PO4'])];
+      const valid = [];
+      for (let r = 1; r < A.h; r++) valid.push(candAcid(M, A, r));
+      return makeEx('acida', [M], A, valid);
+    },
+    basica() {
+      const M = GM[pickOne(['Ca', 'Mg', 'Zn', 'Al', 'Fe'])];
+      const A = GA[pickOne(M.q === 3 ? ['Cl', 'NO3', 'SO4'] : ['Cl', 'NO3'])];
+      const valid = [];
+      for (let r = 1; r < M.q; r++) { const c = candBasic(M, A, r); if (c) valid.push(c); }
+      return makeEx('basica', [M], A, valid);
+    },
+    mixta() {
+      const mono = shuffle(['Li', 'Na', 'K']).slice(0, 2).sort().map(s => GM[s]);
+      const kind = Math.floor(Math.random() * 4);
+      if (kind <= 1) {
+        const A = GA[pickOne(['S', 'CO3', 'SO4'])];
+        return makeEx('mixta', mono, A, [candMix(mono.map(M => ({ M, n: 1 })), A, 1)]);
+      }
+      if (kind === 2) {
+        return makeEx('mixta', mono, GA.PO4, [
+          candMix([{ M: mono[0], n: 2 }, { M: mono[1], n: 1 }], GA.PO4, 1),
+          candMix([{ M: mono[0], n: 1 }, { M: mono[1], n: 2 }], GA.PO4, 1)
+        ]);
+      }
+      if (Math.random() < 0.5) {
+        const pair = [GM[pickOne(['Ca', 'Mg'])], GM[pickOne(['Li', 'Na', 'K'])]].sort((x, y) => x.s < y.s ? -1 : 1);
+        return makeEx('mixta', pair, GA.PO4, [candMix(pair.map(M => ({ M, n: 1 })), GA.PO4, 1)]);
+      }
+      const m = GM[pickOne(['Na', 'K'])];
+      return makeEx('mixta', [m, GM.Al], GA.SO4, [candMix([{ M: m, n: 1 }, { M: GM.Al, n: 1 }], GA.SO4, 2)]);
+    }
+  };
+  const RULE = {
+    neutra: 'En una sal neutra se neutralizan todos los H y todos los OH: no queda ninguno en la sal.',
+    acida: 'En una sal ácida tiene que quedar al menos un H del ácido dentro del anión.',
+    basica: 'En una sal básica tiene que quedar al menos un OH pegado al metal.',
+    mixta: 'En una sal mixta aparecen los dos metales y no queda ningún H ni OH.'
+  };
+  const lower = t => TYPE[t].l.toLowerCase();
+  const cr = { set: 'todo', ex: null, n: 0, good: 0, help: 0, done: false, revealed: false };
+
+  function crStats() { $('#cr-stats').innerHTML = `Bien: <b>${cr.good}</b> · Con ayuda: <b>${cr.help}</b>`; }
+  function crNew(focus) {
+    let e;
+    do { e = GEN[cr.set === 'todo' ? pickOne(['neutra', 'acida', 'basica', 'mixta']) : cr.set](); } while (cr.ex && e.key === cr.ex.key);
+    cr.ex = e; cr.n++; cr.done = false; cr.revealed = false;
+    $('#cr-n').textContent = `Ejercicio ${cr.n}`;
+    $('#cr-ask').innerHTML = `Formá una <span class="pill big ${TYPE[e.type].c}">${lower(e.type)}</span>`;
+    $('#cr-multi').hidden = e.valid.length < 2;
+    const coIn = (id, label) => `<input class="cr-co" id="${id}" type="text" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="1" aria-label="Coeficiente de ${label}">`;
+    $('#cr-eq').innerHTML =
+      e.reactants.map((r, i) => `<span class="cr-term">${coIn('cr-c' + i, r.f)}<span>${fmt(r.f)}</span></span>`).join('<span class="cr-op">+</span>') +
+      '<span class="cr-op">→</span>' +
+      '<span class="cr-term"><input class="cr-salt" id="cr-salt" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sal" aria-label="Fórmula de la sal"></span>' +
+      `<span class="cr-op">+</span><span class="cr-term">${coIn('cr-w', 'agua')}<span>${fmt('H2O')}</span></span>`;
+    crRead();
+    $('#cr-fb').innerHTML = '';
+    $('#cr-next').className = 'btn ghost';
+    if (focus) $('#cr-ask').focus();
+  }
+  const cleanIn = s => s.replace(/[₀-₉]/g, d => String(d.charCodeAt(0) - 0x2080)).replace(/\s+/g, '');
+  function crRead() {
+    const el = $('#cr-salt'), v = el ? cleanIn(el.value).replace(/[{}|^]/g, '') : '';
+    $('#cr-read').innerHTML = v ? `Leo: <b>${fmt(esc(v))}</b>` : 'Escribí los subíndices como números comunes: Na2SO4, Ca(OH)Cl.';
+  }
+  function crBox(kind, title, html) {
+    $('#cr-fb').innerHTML = `<div class="fb-box fb-${kind}"><p class="fb-t">${title}</p>${html}</div>`;
+  }
+  function crFullEq(c) {
+    const e = cr.ex;
+    return e.reactants.map(r => co(c.coefs[r.f]) + r.mk).join(' + ') + ' → ' + c.mk + ' + ' + co(c.w) + '{x|H2O}';
+  }
+  function crAnswerHtml(c, extra) {
+    const e = cr.ex;
+    const alts = e.valid.filter(x => x !== c);
+    return `<p class="big-eq">${fmt(crFullEq(c))}</p>` +
+      `<p><b>${c.name}</b>${c.trad ? ` (${c.trad})` : ''} · ${pill(c.type)}</p><p>${fmt(c.why)}</p>` +
+      (extra || '') +
+      (alts.length ? `<p>También vale: ${alts.map(x => `<b>${fmt(crFullEq(x))}</b> (${x.name})`).join('; ')}.</p>` : '');
+  }
+  function crIons() {
+    const set = [];
+    cr.ex.reactants.forEach(r => r.ions.forEach(i => { if (!set.includes(i)) set.push(i); }));
+    return fmt(set.join(', '));
+  }
+  function readCo(id) {
+    const v = $('#' + id).value.trim();
+    if (v === '') return 1;
+    return /^\d+$/.test(v) && +v > 0 ? +v : null;
+  }
+  function crCheck() {
+    const e = cr.ex;
+    const coefs = e.reactants.map((_, i) => readCo('cr-c' + i));
+    const w = readCo('cr-w');
+    if (coefs.includes(null) || w === null) return crBox('bad', 'Revisá los coeficientes', '<p>Tienen que ser números enteros positivos. Si es 1, dejá el casillero vacío.</p>');
+    let raw = cleanIn($('#cr-salt').value);
+    if (!raw) return crBox('bad', 'Falta la sal', '<p>Escribí la fórmula de la sal en el casillero que está después de la flecha.</p>');
+    let sc = 1;
+    const lead = /^(\d+)(.*)$/.exec(raw);
+    if (lead) { sc = +lead[1]; raw = lead[2]; }
+    const p = parseF(raw);
+    if (sc < 1 || p.err) {
+      let msg = 'Hay un paréntesis sin cerrar o de más.';
+      if (p.err === 'char') msg = p.ch === '+' ? 'Escribí solo la fórmula de la sal. El agua ya está aparte, con su propio coeficiente.'
+        : /[a-z]/.test(p.ch) ? 'Cada símbolo empieza con mayúscula: Na, Cl, O. Revisá las mayúsculas.'
+        : `No reconozco el signo “${esc(p.ch)}”. Usá letras, números y paréntesis.`;
+      if (p.err === 'el') msg = `No reconozco “${esc(p.el)}”. Revisá mayúsculas y minúsculas: Co no es lo mismo que CO.`;
+      if (p.err === 'empty' || sc < 1) msg = 'Escribí la fórmula de la sal.';
+      return crBox('bad', 'No entiendo esa fórmula', `<p>${msg}</p>`);
+    }
+    const key = compKey(raw);
+    const v = e.valid.find(c => compKey(c.f) === key);
+    if (!v) {
+      const o = e.others.find(c => compKey(c.f) === key);
+      if (o) return crBox('bad', `Esa es una ${lower(o.type)}`, `<p>${fmt(o.f)} es ${o.name}. Te pedimos una ${lower(e.type)}. ${RULE[e.type]}</p>`);
+      return crBox('bad', 'Esa sal no sale de estos reactivos', `<p>Revisá las cargas: lo positivo y lo negativo tienen que sumar cero. Iones que tenés: ${crIons()}.</p>`);
+    }
+    const L = {}, R = {};
+    e.reactants.forEach((r, i) => addC(L, parseF(r.f).counts, coefs[i]));
+    addC(R, p.counts, sc);
+    addC(R, { H: 2, O: 1 }, w);
+    const els = [...new Set([...Object.keys(L), ...Object.keys(R)])].sort((a, b) => EL_ORDER.indexOf(a) - EL_ORDER.indexOf(b));
+    const bad = els.filter(x => (L[x] || 0) !== (R[x] || 0));
+    if (bad.length) return crBox('bad', 'La sal está bien, falta balancear',
+      `<p>${fmt(v.f)} es correcta. Ahora contá los átomos de cada lado:</p><ul class="diff">` +
+      bad.map(x => `<li><b>${x}</b>: ${L[x] || 0} a la izquierda y ${R[x] || 0} a la derecha</li>`).join('') + '</ul>');
+    const g = [...coefs, sc, w].reduce((a, b) => gcd(a, b));
+    if (g > 1) return crBox('bad', 'Está balanceada, pero se puede simplificar', `<p>Dividí todos los coeficientes por ${g}. Se usan los números enteros más chicos posibles.</p>`);
+    const typed = raw.replace(/\[/g, '(').replace(/\]/g, ')');
+    const spell = [v.f, ...v.alt].includes(typed) ? '' : `<p>Está bien, aunque se suele escribir ${fmt(v.f)}.</p>`;
+    if (!cr.done && !cr.revealed) cr.good++;
+    cr.done = true;
+    crStats();
+    $('#cr-next').className = 'btn';
+    crBox('ok', '¡Correcto!', crAnswerHtml(v, spell));
+  }
+
+  function buildCR() {
+    const sets = [['todo', 'Cualquiera'], ['neutra', 'Neutra'], ['acida', 'Ácida'], ['basica', 'Básica'], ['mixta', 'Mixta']];
+    $('#cr-tabs').innerHTML = sets.map(([v, l]) => radio('cr-set', 'cr-set-' + v, v, v === cr.set, l, 'chip-t')).join('');
+    $('#cr-tabs').addEventListener('change', e => { cr.set = e.target.value; crNew(false); });
+    $('#cr').addEventListener('submit', e => { e.preventDefault(); crCheck(); });
+    $('#cr').addEventListener('input', e => { if (e.target.id === 'cr-salt') crRead(); });
+    $('#cr-hint').addEventListener('click', () => crBox('hint', 'Pista', `<p>${RULE[cr.ex.type]}</p><p>Iones que tenés: ${crIons()}.</p>`));
+    $('#cr-show').addEventListener('click', () => {
+      if (!cr.done && !cr.revealed) cr.help++;
+      cr.revealed = true;
+      crStats();
+      $('#cr-next').className = 'btn';
+      crBox('ans', 'Respuesta', crAnswerHtml(cr.ex.valid[0]));
+    });
+    $('#cr-next').addEventListener('click', () => crNew(true));
+    crStats();
+    crNew(false);
+  }
+
   /* ================= Inicio ================= */
   buildMatrix();
   select('hidroxido|oxoacido', false);
@@ -1461,5 +1810,6 @@ footer{font-size:.85rem;color:var(--ink-2);border-top:1px solid var(--line);padd
   buildPB(); renderPB();
   buildPM(); renderPM();
   buildEx(); exStart('todo', false);
+  buildCR();
 })();
 </script>
